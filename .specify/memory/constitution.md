@@ -1,50 +1,68 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+SYNC IMPACT REPORT
+Version change: Initial Template -> 1.0.0
+Ratified Date: 2026-08-16
+Last Amended Date: 2026-08-16
+
+Added Principles:
+- I. Code Quality & Architectural Integrity (代码质量与架构完整性)
+- II. Testing Standards & Quality Assurance (测试标准与质量保障)
+- III. User Experience Consistency (用户体验一致性)
+- IV. Performance & Efficiency Requirements (性能与效率要求)
+
+Added Sections:
+- Technical Decision & Implementation Guidance (技术决策与实施指导)
+- Quality Gates & Compliance Governance (质量门禁与治理机制)
+
+Removed Sections: None
+Follow-up TODOs: None
+-->
+
+# my-workspace Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Code Quality & Architectural Integrity (代码质量与架构完整性)
+1. **简洁与可维护性 (KISS 原则)**：代码必须保持简单明了，恪守 KISS 原则，避免过度工程化与不必要的防御性设计。优先采用简单、可读且易于重构的方案。
+2. **分层依赖与高内聚**：严格遵守分层架构约束。领域层（Domain）仅包含业务逻辑与状态转换，通过仓储接口与基础设施交互；应用层（Application）仅负责编排业务流程；基础设施层（Infrastructure）严禁做出业务决策。
+3. **显式契约与消除隐式依赖**：所有业务实体、API 协议与模块间交互必须具备显式类型与契约定义。上层注入时必须仅依赖领域服务接口，消除对具体实现类的装配传递依赖，统一在 port 接口中管理仓储与服务契约。
+4. **事实为本与严禁掩盖错误**：以事实为最高准则。发生运行时错误或异常时，必须抛出明确上下文的领域错误或异常日志，严禁静默吞掉异常、返回伪造降级数据或使用空值掩盖真实问题。
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Testing Standards & Quality Assurance (测试标准与质量保障)
+1. **自动化测试覆盖**：所有新增功能与领域服务必须配套对应的单元测试或集成测试。核心业务逻辑与状态流转覆盖率必须达到可验证标准。
+2. **测试真实性与严禁虚假断言**：测试必须真实反映系统的契约规范。严禁为了通过测试而注释断言、删除失败测试或修改测试预期以匹配错误的实现。
+3. **红-绿-重构循环**：鼓励在实施具体代码改造前先明确测试样例与验收条件（TDD 思想），确保重构与新功能迭代均在测试防护网内进行。
+4. **独立与可复现性**：单元测试必须具备独立性，不依赖外部环境或特定执行顺序；集成测试必须明确声明依赖并在隔离环境中可重复运行。
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. User Experience Consistency (用户体验一致性)
+1. **界面与交互规范一致**：前端与 UI 组件必须遵循统一的设计系统、色彩规范与布局结构。消除无意义的组件样式差异与断层体验。
+2. **完整的状态反馈**：任何用户触发的操作必须提供明确的状态反馈，包括加载中（Loading）、成功（Success）、空数据（Empty）以及错误提示（Error）。错误提示必须简明易懂并提供可行的后续指引。
+3. **流畅的微交互与响应**：UI 必须保证高度的响应性，关键交互配合平滑过渡与微动画，提升整体精致感与视觉体验。
+4. **无障碍与语义化**：遵循语义化 HTML 规范，确保交互元素具有唯一的描述性标识与可访问性，保证不同终端与场景下的一致性体验。
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Performance & Efficiency Requirements (性能与效率要求)
+1. **主线程无阻塞与异步响应**：前端及 UI 渲染主线程禁止执行耗时计算或阻塞同步调用；后端耗时操作必须采用合理的异步机制或后台任务处理。
+2. **高效的资源管理与无状态设计**：持久化与基础设施层结构体保持无状态与并发安全。避免内存泄漏、不必要的重复计算与过度的数据库/网络请求。
+3. **性能指标可度量**：关键操作与数据流必须具备性能指标可度量性（如页面加载时间、API 响应延时、并发吞吐），任何导致性能下降的变更必须提供合理的评估依据。
+4. **防抖与节流优化**：高频触发的事件与请求必须实现防抖（Debounce）或节流（Throttle）控制，合理配置缓存策略以提升系统整体运行效率。
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+## Technical Decision & Implementation Guidance
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+在进行系统设计、技术选型、重构方案规划以及代码实施时，必须依据本章程指导方案的选择：
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+1. **方案评估矩阵**：技术方案设计（Implementation Plan）必须显式对照四大核心原则进行评估，分析方案在代码质量、测试保障、用户体验与性能上的收益与成本。
+2. **复杂性辩护机制**：引入任何复杂设计（如新的框架依赖、复杂的缓存机制、多级分层）前，必须证明其带来的业务价值或性能收益显著高于增加的技术债务与维护成本；否则优先采用简易方案。
+3. **折衷（Trade-off）决策顺序**：当原则之间存在潜在冲突时（例如过度的性能优化可能降低代码可读性），按照以下优先顺序进行决策：
+   - 代码正确性与测试可靠性 > 用户体验一致性 > 系统代码简洁性 > 过早的性能优化。
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Governance & Quality Gates
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+1. **合规性审查 (Compliance Review)**：所有代码提交（PR/Code Review）与技术方案审核必须查验是否符合本章程原则。任何违反核心原则（如吞掉异常、无测试覆盖、破坏架构分层）的代码均不得合规通过。
+2. **例外与特批流程 (Exception Governance)**：因紧急线上修复或特殊历史包袱无法立即满足章程要求时，必须显式标记为临时例外，在技术方案或代码中明确记录原因，并创建对应的技术债务修复任务与完成时限。
+3. **版本演进与修订机制 (Amendment & Versioning)**：
+   - **MAJOR (主版本号)**：对核心原则进行颠覆性修改、废除现有原则或大幅调整治理架构。
+   - **MINOR (次版本号)**：新增核心原则、扩展主要章节或进行重大的实施指导扩充。
+   - **PATCH (修订版本号)**：文字润色、表述优化、错别字修正或补充非实质性的细节说明。
+4. **生效与效力**：本章程自批准发布之日起生效，对项目内所有的技术规划、架构设计与实施代码具有最高指导效力。
 
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
-
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-08-16 | **Last Amended**: 2026-08-16
