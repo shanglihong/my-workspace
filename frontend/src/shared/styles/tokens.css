@@ -1,0 +1,98 @@
+/* 极简风 CSS Design Tokens */
+
+:root {
+  /* 颜色词典 (高级极简日间模式 Light) */
+  --bg-app: #f8fafc;          /* 主编辑器画布：温润清爽的浅灰衬底 */
+  --bg-header: #ffffff;       /* 顶栏：纯净白 */
+  --bg-sidebar: #f1f5f9;      /* 一级 Icon 侧边栏：清爽平滑的柔灰 */
+  --bg-card: #ffffff;         /* 卡片/二级目录栏：晶莹白质感 */
+  --bg-hover: rgba(0, 0, 0, 0.04);       /* 悬停：极其微弱淡灰 */
+  --bg-active: rgba(0, 0, 0, 0.07);      /* 点击：柔和浅灰 */
+  
+  --border-color: #e2e8f0;    /* 边界：精致柔和切线 */
+  --border-light: #f1f5f9;    /* 轻微分割线 */
+  
+  --text-primary: #0f172a;    /* 主字：深邃石墨黑 */
+  --text-secondary: #475569;  /* 次字：烟灰 */
+  --text-muted: #94a3b8;     /* 弱化字：淡柔灰 */
+  
+  --primary-color: #2563eb;   /* 品牌/选中图标：纯正现代皇家蓝 */
+  --primary-hover: #1d4ed8;   /* 悬停加深蓝 */
+  --primary-light: rgba(37, 99, 235, 0.08); /* 选中底质：极柔淡蓝发光衬膜，通透轻盈 */
+  
+  /* 尺寸及阴影定义 */
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 64px;
+  --header-height: 54px;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 2px 4px -1px rgba(15, 23, 42, 0.03);
+  --shadow-lg: 0 10px 20px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.04);
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme='dark'] {
+  /* 颜色词典 (高级曜石极简暗黑模式 Dark) */
+  --bg-app: #090d16;          /* 主编辑器画布：最深邃的曜夜黑 */
+  --bg-header: #0f1420;       /* 顶栏：沉稳优雅的暗墨基底 */
+  --bg-sidebar: #0d111a;      /* 一级 Icon 侧边栏：低调深邃基色 */
+  --bg-card: #131926;         /* 卡片/二级目录栏：稍微浮起的暗石质感 */
+  --bg-hover: rgba(255, 255, 255, 0.05);   /* 悬停：极致微光薄面 */
+  --bg-active: rgba(255, 255, 255, 0.09);  /* 点击/选中：微明高光 */
+  
+  --border-color: rgba(255, 255, 255, 0.08); /* 边界：极细微光分割线 */
+  --border-light: rgba(255, 255, 255, 0.05); /* 轻微分割线 */
+  
+  --text-primary: #f1f5f9;    /* 主字：通透象牙雪白 */
+  --text-secondary: #94a3b8;  /* 次字：石墨精致中灰 */
+  --text-muted: #64748b;     /* 弱化字：暗夜玄灰 */
+  
+  --primary-color: #60a5fa;   /* 品牌/选中图标：清澈柔亮天空蓝 */
+  --primary-hover: #93c5fd;   /* 悬停亮蓝 */
+  --primary-light: rgba(59, 130, 246, 0.16); /* 选中底质：微弱柔蓝发光膜，优雅不刺眼 */
+  
+  --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.6);
+}
+
+/* 全局布局重置 */
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 极简自定义滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(140, 140, 140, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(140, 140, 140, 0.4);
+}
