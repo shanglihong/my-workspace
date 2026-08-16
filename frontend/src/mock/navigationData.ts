@@ -8,14 +8,6 @@ export const mockNavigationTree: NavNode[] = [
     isPinned: true,
     children: [
       {
-        id: 'doc-shouye',
-        title: '首页',
-        type: 'doc',
-        author: { name: '刘巧' },
-        updatedAt: '5月10日修改',
-        content: '# 影视知识库首页\n\n欢迎来到大沙河跑步1号影视创作与记录中心。',
-      },
-      {
         id: 'doc-dianying',
         title: '电影',
         type: 'doc',

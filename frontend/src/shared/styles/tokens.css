@@ -1,16 +1,16 @@
 /* 极简风 CSS Design Tokens */
 
 :root {
-  /* 颜色词典 (高级极简日间模式 Light) */
-  --bg-app: #f8fafc;          /* 主编辑器画布：温润清爽的浅灰衬底 */
-  --bg-header: #ffffff;       /* 顶栏：纯净白 */
-  --bg-sidebar: #f1f5f9;      /* 一级 Icon 侧边栏：清爽平滑的柔灰 */
+  /* 颜色词典 (高级 SaaS 极简日间模式 Light) */
+  --bg-app: #f9fafb;          /* 主画布：自然平滑的浅灰衬底 */
+  --bg-header: rgba(255, 255, 255, 0.85); /* 顶栏：通透毛玻璃质感 */
+  --bg-sidebar: #f3f4f6;      /* 一级 Icon 侧边栏：清爽平滑的柔灰 */
   --bg-card: #ffffff;         /* 卡片/二级目录栏：晶莹白质感 */
-  --bg-hover: rgba(0, 0, 0, 0.04);       /* 悬停：极其微弱淡灰 */
-  --bg-active: rgba(0, 0, 0, 0.07);      /* 点击：柔和浅灰 */
+  --bg-hover: rgba(0, 0, 0, 0.035);      /* 悬停：极致微弱淡灰 */
+  --bg-active: rgba(0, 0, 0, 0.06);      /* 点击：柔和浅灰 */
   
-  --border-color: #e2e8f0;    /* 边界：精致柔和切线 */
-  --border-light: #f1f5f9;    /* 轻微分割线 */
+  --border-color: rgba(0, 0, 0, 0.06);  /* 边界：极微细柔切线，告别粗硬框 */
+  --border-light: rgba(0, 0, 0, 0.03);  /* 轻微分割线 */
   
   --text-primary: #0f172a;    /* 主字：深邃石墨黑 */
   --text-secondary: #475569;  /* 次字：烟灰 */
@@ -19,15 +19,21 @@
   --primary-color: #2563eb;   /* 品牌/选中图标：纯正现代皇家蓝 */
   --primary-hover: #1d4ed8;   /* 悬停加深蓝 */
   --primary-light: rgba(37, 99, 235, 0.08); /* 选中底质：极柔淡蓝发光衬膜，通透轻盈 */
+
+  /* 状态与语义色彩 Token */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+  --color-violet: #8b5cf6;
   
   /* 尺寸及阴影定义 */
   --sidebar-width: 260px;
   --sidebar-collapsed-width: 64px;
   --header-height: 54px;
   
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-  --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 2px 4px -1px rgba(15, 23, 42, 0.03);
-  --shadow-lg: 0 10px 20px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.05), 0 2px 4px -1px rgba(15, 23, 42, 0.02);
+  --shadow-lg: 0 12px 24px -4px rgba(15, 23, 42, 0.07), 0 4px 8px -2px rgba(15, 23, 42, 0.03);
 
   --radius-sm: 4px;
   --radius-md: 6px;
@@ -39,14 +45,14 @@
 [data-theme='dark'] {
   /* 颜色词典 (高级曜石极简暗黑模式 Dark) */
   --bg-app: #090d16;          /* 主编辑器画布：最深邃的曜夜黑 */
-  --bg-header: #0f1420;       /* 顶栏：沉稳优雅的暗墨基底 */
+  --bg-header: rgba(15, 20, 32, 0.8);       /* 顶栏：通透暗夜毛玻璃 */
   --bg-sidebar: #0d111a;      /* 一级 Icon 侧边栏：低调深邃基色 */
   --bg-card: #131926;         /* 卡片/二级目录栏：稍微浮起的暗石质感 */
   --bg-hover: rgba(255, 255, 255, 0.05);   /* 悬停：极致微光薄面 */
   --bg-active: rgba(255, 255, 255, 0.09);  /* 点击/选中：微明高光 */
   
-  --border-color: rgba(255, 255, 255, 0.08); /* 边界：极细微光分割线 */
-  --border-light: rgba(255, 255, 255, 0.05); /* 轻微分割线 */
+  --border-color: rgba(255, 255, 255, 0.07); /* 边界：极细微光分割线 */
+  --border-light: rgba(255, 255, 255, 0.04); /* 轻微分割线 */
   
   --text-primary: #f1f5f9;    /* 主字：通透象牙雪白 */
   --text-secondary: #94a3b8;  /* 次字：石墨精致中灰 */
@@ -56,6 +62,11 @@
   --primary-hover: #93c5fd;   /* 悬停亮蓝 */
   --primary-light: rgba(59, 130, 246, 0.16); /* 选中底质：微弱柔蓝发光膜，优雅不刺眼 */
   
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-info: #60a5fa;
+  --color-violet: #a78bfa;
+
   --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.6);

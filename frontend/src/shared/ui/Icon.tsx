@@ -27,7 +27,16 @@ export type IconName =
   | 'edit'
   | 'clock'
   | 'plugin'
-  | 'workspace';
+  | 'workspace'
+  | 'import'
+  | 'export'
+  | 'check'
+  | 'copy'
+  | 'download'
+  | 'bell'
+  | 'toolbox'
+  | 'logo-brand'
+  | 'close';
 
 interface IconProps {
   name: IconName;
@@ -300,6 +309,93 @@ export const Icon: React.FC<IconProps> = ({ name, size = 16, color = 'currentCol
         return (
           <path
             d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        );
+      case 'import':
+        return (
+          <path
+            d="M4 4v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6H6a2 2 0 00-2 2zm8 6v6m0 0l-3-3m3 3l3-3"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        );
+      case 'export':
+        return (
+          <path
+            d="M4 4v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6H6a2 2 0 00-2 2zm8 10V10m0 0l-3 3m3-3l3 3"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        );
+      case 'check':
+        return (
+          <path
+            d="M20 6L9 17l-5-5"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        );
+      case 'copy':
+        return (
+          <path
+            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        );
+      case 'download':
+        return (
+          <path
+            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        );
+      case 'bell':
+        return (
+          <path
+            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        );
+      case 'toolbox':
+        return (
+          <g stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 7H3a2 2 0 00-2 2v10a2 2 0 002 2h18a2 2 0 002-2V9a2 2 0 00-2-2z" />
+            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+            <path d="M12 12v3" />
+          </g>
+        );
+      case 'logo-brand':
+        return (
+          <g fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 2.5L2.5 7.5l9.5 5 9.5-5-9.5-5z" />
+            <path d="M2.5 17l9.5 5 9.5-5" />
+            <path d="M2.5 12.25l9.5 4.75 9.5-4.75" />
+            <circle cx="12" cy="12.5" r="1.5" fill={color} />
+          </g>
+        );
+      case 'close':
+        return (
+          <path
+            d="M6 18L18 6M6 6l12 12"
             stroke={color}
             strokeWidth="2"
             strokeLinecap="round"

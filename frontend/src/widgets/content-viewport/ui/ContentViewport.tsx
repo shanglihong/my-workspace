@@ -2,13 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useLayout } from '@/app/providers/LayoutProvider';
 import { DocEditor } from 'my-doc-editor';
 import 'my-doc-editor/dist/my-doc-editor.css';
+import { CloudDrivePage } from '@/pages/cloud-drive';
+import { KbHomePage } from '@/pages/kb-home';
+import { GlobalHomePage } from '@/pages/global-home';
+import { TasksPage } from '@/pages/tasks';
+import { ToolboxPage } from '@/pages/toolbox';
 
-export interface MainWorkspaceProps {
+export interface ContentViewportProps {
   className?: string;
 }
 
-export const MainWorkspace: React.FC<MainWorkspaceProps> = ({ className = '' }) => {
-  const { activeNode, theme } = useLayout();
+export const ContentViewport: React.FC<ContentViewportProps> = ({ className = '' }) => {
+  const { activeNode, theme, activeView } = useLayout();
   const [docContent, setDocContent] = useState<string>(activeNode?.content || '');
 
   useEffect(() => {
@@ -16,6 +21,26 @@ export const MainWorkspace: React.FC<MainWorkspaceProps> = ({ className = '' }) 
       setDocContent(activeNode.content || '');
     }
   }, [activeNode?.id]);
+
+  if (activeView === 'home') {
+    return <GlobalHomePage />;
+  }
+
+  if (activeView === 'kb-home') {
+    return <KbHomePage />;
+  }
+
+  if (activeView === 'tasks') {
+    return <TasksPage />;
+  }
+
+  if (activeView === 'toolbox') {
+    return <ToolboxPage />;
+  }
+
+  if (activeView === 'drive') {
+    return <CloudDrivePage />;
+  }
 
   if (!activeNode) {
     return (

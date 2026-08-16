@@ -32,23 +32,6 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, onSelect }) => {
             >
               {item.label}
             </span>
-
-            {/* 最后一级若是固定节点展示钉子图标 */}
-            {item.isLast && (item.nodeRef?.isPinned ?? true) && (
-              <span
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  color: 'var(--text-muted)',
-                  cursor: 'pointer',
-                  marginLeft: '2px',
-                  opacity: 0.8,
-                }}
-                title="固定在侧边栏"
-              >
-                <Icon name="pin" size={12} />
-              </span>
-            )}
           </div>
         </React.Fragment>
       ))}
