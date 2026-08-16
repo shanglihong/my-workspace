@@ -61,7 +61,6 @@ export const App: React.FC = () => {
               ref={editorRef}
               value={initialContent}
               theme={theme}
-              drawioUrl="/drawio/index.html"
               onChange={(_docNode: any, markdown: string) => {
                 setMarkdownOutput(markdown);
               }}
