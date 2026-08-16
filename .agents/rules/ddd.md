@@ -2,7 +2,7 @@
 trigger: always_on
 ---
 
-# DDD 编程指南
+# DDD 后端编程指南
 ## 代码目录层级
 代码根据业务功能分为三层
 - application：应用层，存放编排代码，编排业务逻辑
