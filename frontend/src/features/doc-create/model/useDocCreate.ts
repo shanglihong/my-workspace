@@ -1,16 +1,16 @@
-import { useLayout } from '@/app/providers/LayoutProvider';
+import { useNavigation } from '@/entities/navigation';
 
-export const useDocCreate = () => {
-  const { createNewNode, setActiveView } = useLayout();
+export const useDocCreate = (onCreated?: () => void) => {
+  const { createNewNode } = useNavigation();
 
   const handleCreateDoc = () => {
     createNewNode('doc');
-    setActiveView('editor');
+    if (onCreated) onCreated();
   };
 
   const handleCreateChart = () => {
     createNewNode('chart');
-    setActiveView('editor');
+    if (onCreated) onCreated();
   };
 
   return {
@@ -18,3 +18,4 @@ export const useDocCreate = () => {
     handleCreateChart,
   };
 };
+

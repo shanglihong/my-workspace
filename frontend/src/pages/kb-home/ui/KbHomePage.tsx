@@ -3,9 +3,11 @@ import { CreateDocButtonGroup } from '@/features';
 import { useKbHome } from '../model/useKbHome';
 import { KbStatHeader } from './KbStatHeader';
 import { Icon } from '@/shared/ui';
+import { useLayout } from '@/app/providers/LayoutProvider';
 
 export const KbHomePage: React.FC = () => {
   const { quickAccessItems, setActiveNodeId } = useKbHome();
+  const { setActiveView } = useLayout();
 
   return (
     <div
@@ -28,14 +30,24 @@ export const KbHomePage: React.FC = () => {
         {/* 快捷新建与看板状态 */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
           {/* 引入通用 Feature 组件：新建文档/导图按钮组 */}
-          <CreateDocButtonGroup />
+          <CreateDocButtonGroup onCreated={() => setActiveView('editor')} />
+
 
           {/* 右侧小数据徽章 */}
-          <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'var(--text-muted)' }}>
-            <span>📚 知识库节点：<strong style={{ color: 'var(--text-primary)' }}>5 个页面</strong></span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '12px', color: 'var(--text-muted)' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <Icon name="book" size={13} color="var(--primary-color)" />
+              <span>知识库节点：</span>
+              <strong style={{ color: 'var(--text-primary)' }}>5 个页面</strong>
+            </span>
             <span>·</span>
-            <span>📖 已连微信读书：<strong style={{ color: '#10b981' }}>128 条划线</strong></span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <Icon name="file-text" size={13} color="#10b981" />
+              <span>已连微信读书：</span>
+              <strong style={{ color: '#10b981' }}>128 条划线</strong>
+            </span>
           </div>
+
         </div>
 
         {/* 常用与推荐文档 Grid */}

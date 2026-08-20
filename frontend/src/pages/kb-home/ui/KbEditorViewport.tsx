@@ -8,14 +8,14 @@ export interface KbEditorViewportProps {
 }
 
 export const KbEditorViewport: React.FC<KbEditorViewportProps> = ({ className = '' }) => {
-  const { activeNode, theme } = useLayout();
+  const { activeNode, theme, updateNodeContent } = useLayout();
   const [docContent, setDocContent] = useState<string>(activeNode?.content || '');
 
   useEffect(() => {
     if (activeNode) {
       setDocContent(activeNode.content || '');
     }
-  }, [activeNode?.id]);
+  }, [activeNode?.id, activeNode?.content]);
 
   if (!activeNode) {
     return (
@@ -52,8 +52,9 @@ export const KbEditorViewport: React.FC<KbEditorViewportProps> = ({ className = 
               key={activeNode.id}
               value={docContent}
               theme={theme}
-              onChange={(_docNode: any, markdown: string) => {
+              onChange={(_docNode: unknown, markdown: string) => {
                 setDocContent(markdown);
+                updateNodeContent(activeNode.id, markdown);
               }}
             />
           </div>

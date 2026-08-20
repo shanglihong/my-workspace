@@ -2,9 +2,11 @@ import React from 'react';
 import { DocSearchInput, CreateDocButtonGroup } from '@/features';
 import { useGlobalHome } from '../model/useGlobalHome';
 import { GlobalHomeRecentDocs } from './GlobalHomeRecentDocs';
+import { useLayout } from '@/app/providers/LayoutProvider';
 
 export const GlobalHomePage: React.FC = () => {
   const { recentDocs, handleSelectSearchResult } = useGlobalHome();
+  const { setActiveView } = useLayout();
 
   return (
     <div
@@ -49,8 +51,9 @@ export const GlobalHomePage: React.FC = () => {
         {/* 快捷按钮 Feature 动作 */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)' }}>快速新建</div>
-          <CreateDocButtonGroup />
+          <CreateDocButtonGroup onCreated={() => setActiveView('editor')} />
         </div>
+
 
         {/* 最近访问的核心文档 Grid */}
         <GlobalHomeRecentDocs docs={recentDocs} onSelectDoc={handleSelectSearchResult} />

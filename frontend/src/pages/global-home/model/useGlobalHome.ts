@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useLayout } from '@/app/providers/LayoutProvider';
+import { searchNodes } from '@/entities/navigation';
 
 export const useGlobalHome = () => {
   const { setActiveNodeId, setActiveView, createNewNode, navigationTree } = useLayout();
@@ -7,23 +8,7 @@ export const useGlobalHome = () => {
 
   // 搜索全站所有节点
   const searchResults = useMemo(() => {
-    if (!searchQuery.trim()) return [];
-    const query = searchQuery.toLowerCase();
-
-    const results: any[] = [];
-    const searchRecursive = (nodes: any[]) => {
-      nodes.forEach(node => {
-        if (node.title && node.title.toLowerCase().includes(query)) {
-          results.push(node);
-        }
-        if (node.children) {
-          searchRecursive(node.children);
-        }
-      });
-    };
-
-    searchRecursive(navigationTree);
-    return results;
+    return searchNodes(navigationTree, searchQuery);
   }, [searchQuery, navigationTree]);
 
   // 点击搜索结果跳转
@@ -48,3 +33,4 @@ export const useGlobalHome = () => {
     handleSelectSearchResult,
   };
 };
+

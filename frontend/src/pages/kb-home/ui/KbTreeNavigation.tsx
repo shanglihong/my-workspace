@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { NavNode } from '@/entities/navigation';
 import { Icon, IconName } from '@/shared/ui';
-import { useLayout } from '@/app/providers/LayoutProvider';
 
 export interface KbTreeNavigationProps {
   nodes: NavNode[];
   activeNodeId: string;
+  activeView?: string;
   onSelectNode: (node: NavNode) => void;
   isCollapsedSidebar?: boolean;
   filterQuery?: string;
@@ -34,11 +34,11 @@ const filterTreeNodes = (nodesList: NavNode[], query: string): NavNode[] => {
 export const KbTreeNavigation: React.FC<KbTreeNavigationProps> = ({
   nodes,
   activeNodeId,
+  activeView = 'editor',
   onSelectNode,
   isCollapsedSidebar = false,
   filterQuery = '',
 }) => {
-  const { activeView } = useLayout();
   const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({
     'kb-yingshi': true,
   });
@@ -70,12 +70,12 @@ export const KbTreeNavigation: React.FC<KbTreeNavigationProps> = ({
   const getNodeIconColor = (type: NavNode['type']): string => {
     switch (type) {
       case 'folder':
-        return '#f59e0b'; // 明亮金黄/琥珀色
+        return '#f59e0b';
       case 'chart':
-        return '#8b5cf6'; // 魅力紫罗兰
+        return '#8b5cf6';
       case 'doc':
       default:
-        return '#3b82f6'; // 经典蓝色
+        return '#3b82f6';
     }
   };
 
@@ -86,7 +86,6 @@ export const KbTreeNavigation: React.FC<KbTreeNavigationProps> = ({
     const isActive = activeView === 'editor' && node.id === activeNodeId;
     const hasChildren = node.children && node.children.length > 0;
 
-    // 折叠状态下的单节点渲染
     if (isCollapsedSidebar) {
       return (
         <div key={node.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -107,17 +106,10 @@ export const KbTreeNavigation: React.FC<KbTreeNavigationProps> = ({
               margin: '2px 0',
               position: 'relative',
             }}
-            onMouseEnter={e => {
-              if (!isActive) e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
-            }}
-            onMouseLeave={e => {
-              if (!isActive) e.currentTarget.style.backgroundColor = 'transparent';
-            }}
           >
             <Icon name={getNodeIcon(node.type)} size={16} color={getNodeIconColor(node.type)} />
           </div>
 
-          {/* 递归渲染子节点（折叠状态平铺图标） */}
           {hasChildren && isExpanded && (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
               {node.children!.map(child => renderNode(child, depth + 1))}
@@ -127,7 +119,6 @@ export const KbTreeNavigation: React.FC<KbTreeNavigationProps> = ({
       );
     }
 
-    // 展开状态下的正常深树渲染
     return (
       <div key={node.id} style={{ display: 'flex', flexDirection: 'column' }}>
         <div
@@ -146,14 +137,7 @@ export const KbTreeNavigation: React.FC<KbTreeNavigationProps> = ({
             userSelect: 'none',
             margin: '1px 0',
           }}
-          onMouseEnter={e => {
-            if (!isActive) e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
-          }}
-          onMouseLeave={e => {
-            if (!isActive) e.currentTarget.style.backgroundColor = 'transparent';
-          }}
         >
-          {/* 折叠/展开箭头 */}
           {hasChildren ? (
             <span
               onClick={e => toggleExpand(e, node.id)}
@@ -173,12 +157,10 @@ export const KbTreeNavigation: React.FC<KbTreeNavigationProps> = ({
             <span style={{ width: '20px' }} />
           )}
 
-          {/* 节点彩色图标 */}
           <span style={{ marginRight: '8px', opacity: 1, display: 'inline-flex' }}>
             <Icon name={getNodeIcon(node.type)} size={15} color={getNodeIconColor(node.type)} />
           </span>
 
-          {/* 节点标题 */}
           <span
             style={{
               flex: 1,
@@ -190,7 +172,6 @@ export const KbTreeNavigation: React.FC<KbTreeNavigationProps> = ({
             {node.title}
           </span>
 
-          {/* 置顶标识 */}
           {node.isPinned && (
             <span style={{ marginLeft: 'auto', opacity: 0.4, display: 'inline-flex' }}>
               <Icon name="pin" size={12} />
@@ -198,7 +179,6 @@ export const KbTreeNavigation: React.FC<KbTreeNavigationProps> = ({
           )}
         </div>
 
-        {/* 递归子树 */}
         {hasChildren && isExpanded && (
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {node.children!.map(child => renderNode(child, depth + 1))}

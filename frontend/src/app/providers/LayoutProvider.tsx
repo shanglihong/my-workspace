@@ -1,8 +1,7 @@
-import React, { createContext, useContext, useState, useMemo } from 'react';
-import { NavNode, BreadcrumbItem, calculateBreadcrumbPath, findNodePath } from '@/entities/navigation';
+import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
+import { NavigationProvider, useNavigation, NavNode, BreadcrumbItem } from '@/entities/navigation';
 import { useLayoutToggle } from '@/features/layout-toggle';
 import { useTheme, ThemeMode } from '@/features/theme-switch';
-import { mockNavigationTree } from '@/mock';
 
 export type ActiveView = 'editor' | 'drive' | 'home' | 'kb-home' | 'tasks' | 'toolbox';
 
@@ -22,54 +21,40 @@ interface LayoutContextValue {
   isReadMode: boolean;
   toggleReadMode: () => void;
   createNewNode: (type: 'doc' | 'chart', title?: string) => void;
+  updateNodeContent: (nodeId: string, content: string) => void;
   activeView: ActiveView;
   setActiveView: (view: ActiveView) => void;
 }
 
 const LayoutContext = createContext<LayoutContextValue | null>(null);
 
-export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const LayoutInnerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isCollapsed, toggleSidebar } = useLayoutToggle(false);
   const { theme, toggleTheme } = useTheme('light');
-  const [navigationTree, setNavigationTree] = useState<NavNode[]>(mockNavigationTree);
-  const [activeNodeId, setActiveNodeId] = useState<string>('doc-dianying');
+  const nav = useNavigation();
+
   const [isOutlineOpen, setIsOutlineOpen] = useState<boolean>(false);
   const [isReadMode, setIsReadMode] = useState<boolean>(false);
   const [activeView, setActiveView] = useState<ActiveView>('home');
 
-  const toggleOutline = () => setIsOutlineOpen(prev => !prev);
-  const toggleReadMode = () => setIsReadMode(prev => !prev);
+  const toggleOutline = useCallback(() => setIsOutlineOpen(prev => !prev), []);
+  const toggleReadMode = useCallback(() => setIsReadMode(prev => !prev), []);
 
-  const handleSelectNodeId = (id: string) => {
-    setActiveNodeId(id);
-    setActiveView('editor');
-  };
+  const handleSelectNodeId = useCallback(
+    (id: string) => {
+      nav.setActiveNodeId(id);
+      setActiveView('editor');
+    },
+    [nav]
+  );
 
-  const breadcrumbPath = useMemo(() => {
-    return calculateBreadcrumbPath(navigationTree, activeNodeId);
-  }, [navigationTree, activeNodeId]);
-
-  const activeNode = useMemo(() => {
-    const path = findNodePath(navigationTree, activeNodeId);
-    return path ? path[path.length - 1] : null;
-  }, [navigationTree, activeNodeId]);
-
-  const createNewNode = (type: 'doc' | 'chart', title?: string) => {
-    const newId = `${type}-${Date.now()}`;
-    const newNodeName = title || (type === 'doc' ? '无标题文档' : '新建流程图');
-    const newNode: NavNode = {
-      id: newId,
-      title: newNodeName,
-      type: type,
-      author: { name: '当前用户' },
-      updatedAt: '刚刚修改',
-      content: type === 'doc' ? `# ${newNodeName}\n\n开始撰写内容...` : '',
-    };
-
-    setNavigationTree(prev => [newNode, ...prev]);
-    setActiveNodeId(newId);
-    setActiveView('editor');
-  };
+  const handleCreateNewNode = useCallback(
+    (type: 'doc' | 'chart', title?: string) => {
+      nav.createNewNode(type, title);
+      setActiveView('editor');
+    },
+    [nav]
+  );
 
   const value = useMemo(
     () => ({
@@ -77,17 +62,18 @@ export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       toggleSidebar,
       theme,
       toggleTheme,
-      activeNodeId,
+      activeNodeId: nav.activeNodeId,
       setActiveNodeId: handleSelectNodeId,
-      navigationTree,
-      setNavigationTree,
-      breadcrumbPath,
-      activeNode,
+      navigationTree: nav.navigationTree,
+      setNavigationTree: nav.setNavigationTree,
+      breadcrumbPath: nav.breadcrumbPath,
+      activeNode: nav.activeNode,
       isOutlineOpen,
       toggleOutline,
       isReadMode,
       toggleReadMode,
-      createNewNode,
+      createNewNode: handleCreateNewNode,
+      updateNodeContent: nav.updateNodeContent,
       activeView,
       setActiveView,
     }),
@@ -96,17 +82,32 @@ export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       toggleSidebar,
       theme,
       toggleTheme,
-      activeNodeId,
-      navigationTree,
-      breadcrumbPath,
-      activeNode,
+      nav.activeNodeId,
+      handleSelectNodeId,
+      nav.navigationTree,
+      nav.setNavigationTree,
+      nav.breadcrumbPath,
+      nav.activeNode,
       isOutlineOpen,
+      toggleOutline,
       isReadMode,
+      toggleReadMode,
+      handleCreateNewNode,
+      nav.updateNodeContent,
       activeView,
+      setActiveView,
     ]
   );
 
   return <LayoutContext.Provider value={value}>{children}</LayoutContext.Provider>;
+};
+
+export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <NavigationProvider>
+      <LayoutInnerProvider>{children}</LayoutInnerProvider>
+    </NavigationProvider>
+  );
 };
 
 export function useLayout() {
@@ -116,3 +117,4 @@ export function useLayout() {
   }
   return context;
 }
+

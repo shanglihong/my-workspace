@@ -1,11 +1,12 @@
 import React from 'react';
 import { LayoutProvider } from './providers/LayoutProvider';
-import { WorkspacePage } from '@/pages/workspace';
+import { WorkspaceLayout } from './layout';
 
 export const App: React.FC = () => {
   return (
     <LayoutProvider>
-      <WorkspacePage />
+      <WorkspaceLayout />
     </LayoutProvider>
   );
 };
+

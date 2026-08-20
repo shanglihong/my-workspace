@@ -1,35 +1,19 @@
 import { useState, useMemo } from 'react';
-import { useLayout } from '@/app/providers/LayoutProvider';
-import { NavNode } from '@/entities/navigation';
+import { useNavigation, searchNodes } from '@/entities/navigation';
 
-export const useDocSearch = () => {
-  const { setActiveNodeId, setActiveView, navigationTree } = useLayout();
+
+export const useDocSearch = (onSelect?: (nodeId: string) => void) => {
+  const { setActiveNodeId, navigationTree } = useNavigation();
   const [query, setQuery] = useState<string>('');
 
   const searchResults = useMemo(() => {
-    if (!query.trim()) return [];
-    const lowerQuery = query.toLowerCase();
-
-    const results: NavNode[] = [];
-    const searchRecursive = (nodes: NavNode[]) => {
-      nodes.forEach(node => {
-        if (node.title && node.title.toLowerCase().includes(lowerQuery)) {
-          results.push(node);
-        }
-        if (node.children) {
-          searchRecursive(node.children);
-        }
-      });
-    };
-
-    searchRecursive(navigationTree);
-    return results;
+    return searchNodes(navigationTree, query);
   }, [query, navigationTree]);
 
   const handleSelectResult = (nodeId: string) => {
     setActiveNodeId(nodeId);
-    setActiveView('editor');
     setQuery('');
+    if (onSelect) onSelect(nodeId);
   };
 
   const clearQuery = () => setQuery('');
@@ -42,3 +26,4 @@ export const useDocSearch = () => {
     handleSelectResult,
   };
 };
+

@@ -1,3 +1,5 @@
+import { APP_CONFIG } from '../config';
+
 export interface RequestOptions extends RequestInit {
   timeout?: number;
 }
@@ -9,11 +11,16 @@ export class HttpError extends Error {
   }
 }
 
-export async function httpClient<T = any>(
+export async function httpClient<T = unknown>(
   url: string,
   options: RequestOptions = {}
 ): Promise<T> {
-  const { timeout = 10000, headers = {}, ...customConfig } = options;
+  const { timeout = APP_CONFIG.apiTimeout, headers = {}, ...customConfig } = options;
+
+  const requestUrl = /^https?:\/\//i.test(url)
+    ? url
+    : `${APP_CONFIG.apiBaseUrl.replace(/\/$/, '')}/${url.replace(/^\//, '')}`;
+
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -29,7 +36,7 @@ export async function httpClient<T = any>(
   };
 
   try {
-    const response = await fetch(url, config);
+    const response = await fetch(requestUrl, config);
     clearTimeout(timeoutId);
 
     if (!response.ok) {
@@ -42,11 +49,12 @@ export async function httpClient<T = any>(
     }
 
     return (await response.json()) as T;
-  } catch (error: any) {
+  } catch (error: unknown) {
     clearTimeout(timeoutId);
-    if (error.name === 'AbortError') {
+    if (error instanceof Error && error.name === 'AbortError') {
       throw new Error(`Request Timeout after ${timeout}ms: ${url}`);
     }
     throw error;
   }
 }
+

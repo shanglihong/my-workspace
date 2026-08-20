@@ -1,6 +1,7 @@
 import React from 'react';
+import { useNavigation } from '@/entities/navigation';
 import { useLayout } from '@/app/providers/LayoutProvider';
-import { KbTreeNavigation } from '@/pages/workspace/ui/KbTreeNavigation';
+import { KbTreeNavigation } from '@/pages/kb-home';
 import { Icon } from '@/shared/ui';
 
 export interface SidebarKbDrawerProps {
@@ -10,7 +11,8 @@ export interface SidebarKbDrawerProps {
 }
 
 export const SidebarKbDrawer: React.FC<SidebarKbDrawerProps> = ({ searchQuery, onSearchChange, onClose }) => {
-  const { activeNodeId, setActiveNodeId, navigationTree } = useLayout();
+  const { activeNodeId, navigationTree } = useNavigation();
+  const { setActiveNodeId } = useLayout();
 
   return (
     <div
@@ -116,3 +118,4 @@ export const SidebarKbDrawer: React.FC<SidebarKbDrawerProps> = ({ searchQuery, o
     </div>
   );
 };
+

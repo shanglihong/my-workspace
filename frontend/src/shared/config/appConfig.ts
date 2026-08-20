@@ -1,6 +1,7 @@
 export const APP_CONFIG = {
   appName: 'Antigravity Workspace',
   version: '0.1.0',
+  apiBaseUrl: '/api',
   defaultTheme: 'light' as const,
   apiTimeout: 10000,
   maxSearchHistory: 10,
@@ -9,3 +10,4 @@ export const APP_CONFIG = {
     sidebarCollapsed: 'app_sidebar_collapsed',
   },
 } as const;
+

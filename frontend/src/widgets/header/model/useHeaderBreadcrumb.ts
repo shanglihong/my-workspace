@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
 import { useLayout } from '@/app/providers/LayoutProvider';
-import { BreadcrumbItem } from '@/entities/navigation';
+import { BreadcrumbItem, NavNode } from '@/entities/navigation';
 
 export const useHeaderBreadcrumb = () => {
   const { activeView, activeNode, breadcrumbPath } = useLayout();
 
   const headerContent = useMemo(() => {
     if (activeView === 'home') {
-      const dummyNode: any = { id: 'home', title: '工作台', type: 'doc' };
+      const dummyNode: NavNode = { id: 'home', title: '工作台', type: 'doc' };
       return {
         breadcrumb: [
           { id: 'home-root', label: '工作台', type: 'folder', isLast: false, nodeRef: dummyNode },
@@ -18,7 +18,7 @@ export const useHeaderBreadcrumb = () => {
     }
 
     if (activeView === 'tasks') {
-      const dummyNode: any = { id: 'tasks', title: '计划任务管理', type: 'doc' };
+      const dummyNode: NavNode = { id: 'tasks', title: '计划任务管理', type: 'doc' };
       return {
         breadcrumb: [
           { id: 'tasks-root', label: '工作空间', type: 'folder', isLast: false, nodeRef: dummyNode },
@@ -29,7 +29,7 @@ export const useHeaderBreadcrumb = () => {
     }
 
     if (activeView === 'toolbox') {
-      const dummyNode: any = { id: 'toolbox', title: '工具箱', type: 'doc' };
+      const dummyNode: NavNode = { id: 'toolbox', title: '工具箱', type: 'doc' };
       return {
         breadcrumb: [
           { id: 'toolbox-root', label: '工作台', type: 'folder', isLast: false, nodeRef: dummyNode },
@@ -40,7 +40,7 @@ export const useHeaderBreadcrumb = () => {
     }
 
     if (activeView === 'drive') {
-      const dummyNode: any = { id: 'drive', title: '云端存储', type: 'folder' };
+      const dummyNode: NavNode = { id: 'drive', title: '云端存储', type: 'folder' };
       return {
         breadcrumb: [
           { id: 'drive-root', label: '云端存储', type: 'folder', isLast: false, nodeRef: dummyNode },
@@ -51,7 +51,7 @@ export const useHeaderBreadcrumb = () => {
     }
 
     if (activeView === 'kb-home') {
-      const dummyNode: any = { id: 'kb-home', title: '空间首页', type: 'doc' };
+      const dummyNode: NavNode = { id: 'kb-home', title: '空间首页', type: 'doc' };
       return {
         breadcrumb: [
           { id: 'kb-root', label: '知识库空间', type: 'folder', isLast: false, nodeRef: dummyNode },
@@ -70,3 +70,4 @@ export const useHeaderBreadcrumb = () => {
 
   return { headerContent, activeView };
 };
+

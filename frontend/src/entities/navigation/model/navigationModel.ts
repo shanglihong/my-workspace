@@ -18,6 +18,51 @@ export function findNodePath(nodes: NavNode[], targetId: string, currentPath: Na
 }
 
 /**
+ * 遍历查找树中满足关键字搜索的节点列表
+ */
+export function searchNodes(nodes: NavNode[], query: string): NavNode[] {
+  if (!query.trim()) return [];
+  const lowerQuery = query.toLowerCase();
+
+  const results: NavNode[] = [];
+  const searchRecursive = (list: NavNode[]) => {
+    list.forEach(node => {
+      if (node.title && node.title.toLowerCase().includes(lowerQuery)) {
+        results.push(node);
+      }
+      if (node.children && node.children.length > 0) {
+        searchRecursive(node.children);
+      }
+    });
+  };
+
+  searchRecursive(nodes);
+  return results;
+}
+
+/**
+ * 递归在树结构中更新指定 ID 节点的函数
+ */
+export function updateNodeInTree(
+  nodes: NavNode[],
+  targetId: string,
+  updater: (node: NavNode) => NavNode
+): NavNode[] {
+  return nodes.map(node => {
+    if (node.id === targetId) {
+      return updater(node);
+    }
+    if (node.children && node.children.length > 0) {
+      return {
+        ...node,
+        children: updateNodeInTree(node.children, targetId, updater),
+      };
+    }
+    return node;
+  });
+}
+
+/**
  * 计算用于顶部 Header 展示的完整面包屑项列表
  */
 export function calculateBreadcrumbPath(nodes: NavNode[], activeNodeId: string): BreadcrumbItem[] {
@@ -42,3 +87,4 @@ export function calculateBreadcrumbPath(nodes: NavNode[], activeNodeId: string):
     nodeRef: node,
   }));
 }
+

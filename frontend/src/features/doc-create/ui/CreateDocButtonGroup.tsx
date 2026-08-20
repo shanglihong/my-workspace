@@ -4,10 +4,12 @@ import { useDocCreate } from '../model/useDocCreate';
 
 export interface CreateDocButtonGroupProps {
   className?: string;
+  onCreated?: () => void;
 }
 
-export const CreateDocButtonGroup: React.FC<CreateDocButtonGroupProps> = ({ className = '' }) => {
-  const { handleCreateDoc, handleCreateChart } = useDocCreate();
+export const CreateDocButtonGroup: React.FC<CreateDocButtonGroupProps> = ({ className = '', onCreated }) => {
+  const { handleCreateDoc, handleCreateChart } = useDocCreate(onCreated);
+
 
   return (
     <div style={{ display: 'flex', gap: '10px' }} className={className}>
