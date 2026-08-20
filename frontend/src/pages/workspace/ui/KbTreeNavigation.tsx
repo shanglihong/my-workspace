@@ -3,7 +3,7 @@ import { NavNode } from '@/entities/navigation';
 import { Icon, IconName } from '@/shared/ui';
 import { useLayout } from '@/app/providers/LayoutProvider';
 
-interface TreeNavigationProps {
+export interface KbTreeNavigationProps {
   nodes: NavNode[];
   activeNodeId: string;
   onSelectNode: (node: NavNode) => void;
@@ -31,7 +31,7 @@ const filterTreeNodes = (nodesList: NavNode[], query: string): NavNode[] => {
     .filter(Boolean) as NavNode[];
 };
 
-export const TreeNavigation: React.FC<TreeNavigationProps> = ({
+export const KbTreeNavigation: React.FC<KbTreeNavigationProps> = ({
   nodes,
   activeNodeId,
   onSelectNode,
@@ -70,12 +70,12 @@ export const TreeNavigation: React.FC<TreeNavigationProps> = ({
   const getNodeIconColor = (type: NavNode['type']): string => {
     switch (type) {
       case 'folder':
-        return '#f59e0b'; // 明亮金黄/琥珀色 (Mac/Win 经典文件夹)
+        return '#f59e0b'; // 明亮金黄/琥珀色
       case 'chart':
-        return '#8b5cf6'; // 魅力紫罗兰 (思维导图 / 架构图)
+        return '#8b5cf6'; // 魅力紫罗兰
       case 'doc':
       default:
-        return '#3b82f6'; // 经典蓝色 (云文档 / 笔记)
+        return '#3b82f6'; // 经典蓝色
     }
   };
 

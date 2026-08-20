@@ -1,2 +1,3 @@
-// Widgets layer public API
-export {};
+export * from './header';
+export * from './sidebar';
+export * from './plugin-drawer';

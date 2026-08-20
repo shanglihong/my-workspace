@@ -2,7 +2,9 @@ import React, { createContext, useContext, useState, useMemo } from 'react';
 import { NavNode, BreadcrumbItem, calculateBreadcrumbPath, findNodePath } from '@/entities/navigation';
 import { useLayoutToggle } from '@/features/layout-toggle';
 import { useTheme, ThemeMode } from '@/features/theme-switch';
-import { mockNavigationTree } from '@/mock/navigationData';
+import { mockNavigationTree } from '@/mock';
+
+export type ActiveView = 'editor' | 'drive' | 'home' | 'kb-home' | 'tasks' | 'toolbox';
 
 interface LayoutContextValue {
   isSidebarCollapsed: boolean;
@@ -20,8 +22,8 @@ interface LayoutContextValue {
   isReadMode: boolean;
   toggleReadMode: () => void;
   createNewNode: (type: 'doc' | 'chart', title?: string) => void;
-  activeView: 'editor' | 'drive' | 'home' | 'kb-home' | 'tasks' | 'toolbox';
-  setActiveView: (view: 'editor' | 'drive' | 'home' | 'kb-home' | 'tasks' | 'toolbox') => void;
+  activeView: ActiveView;
+  setActiveView: (view: ActiveView) => void;
 }
 
 const LayoutContext = createContext<LayoutContextValue | null>(null);
@@ -33,7 +35,7 @@ export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [activeNodeId, setActiveNodeId] = useState<string>('doc-dianying');
   const [isOutlineOpen, setIsOutlineOpen] = useState<boolean>(false);
   const [isReadMode, setIsReadMode] = useState<boolean>(false);
-  const [activeView, setActiveView] = useState<'editor' | 'drive' | 'home' | 'kb-home' | 'tasks' | 'toolbox'>('home');
+  const [activeView, setActiveView] = useState<ActiveView>('home');
 
   const toggleOutline = () => setIsOutlineOpen(prev => !prev);
   const toggleReadMode = () => setIsReadMode(prev => !prev);
@@ -89,7 +91,19 @@ export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       activeView,
       setActiveView,
     }),
-    [isCollapsed, theme, activeNodeId, navigationTree, breadcrumbPath, activeNode, isOutlineOpen, isReadMode, activeView]
+    [
+      isCollapsed,
+      toggleSidebar,
+      theme,
+      toggleTheme,
+      activeNodeId,
+      navigationTree,
+      breadcrumbPath,
+      activeNode,
+      isOutlineOpen,
+      isReadMode,
+      activeView,
+    ]
   );
 
   return <LayoutContext.Provider value={value}>{children}</LayoutContext.Provider>;

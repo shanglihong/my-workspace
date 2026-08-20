@@ -1,2 +1,1 @@
-// Mock layer
-export {};
+export * from './navigationData';
