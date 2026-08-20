@@ -1,25 +1,25 @@
 /* 极简风 CSS Design Tokens */
 
 :root {
-  /* 颜色词典 (日间模式 Light：100% 保持用户调好的精确原版配色) */
+  /* 颜色词典 (日间模式 Light：方案1 - 极具视觉识别度的皇家宝蓝 Royal Navy) */
   --bg-app: #f9fafb;          /* 主画布衬底 */
   --bg-header: rgba(255, 255, 255, 0.85); /* 顶栏毛玻璃 */
-  --bg-sidebar: #fafafa;      /* 侧边栏/抽屉背景：100% 保持用户指定的原版底色 */
+  --bg-sidebar: #fafafa;      /* 侧边栏/抽屉背景底色 */
   --bg-card: #ffffff;         /* 悬浮 Card/框底色 */
-  --bg-hover: #f3f4f6;        /* 悬停/胶囊按钮底色 */
+  --bg-hover: #f1f5f9;        /* 悬停/胶囊按钮柔灰底色 */
   --bg-active: rgba(0, 0, 0, 0.06);
   
   --border-color: rgba(0, 0, 0, 0.08);  /* 轻柔切线 */
   --border-light: rgba(0, 0, 0, 0.04);
   
-  --text-primary: #1f1f1f;    /* 墨黑原版正文字体 */
-  --text-secondary: #595959;  /* 烟灰次级字 */
+  --text-primary: #0f172a;    /* 深石墨蓝黑正文字体 */
+  --text-secondary: #475569;  /* 烟灰次级字 */
   --text-muted: #8c8c8c;     /* 弱化小字 */
   
-  --user-bubble-bg: #262626;  /* 用户消息深黑大圆角胶囊 */
+  --user-bubble-bg: #2563eb;  /* 用户消息：靓丽纯正皇家宝蓝 (取代原版硬纯黑，极具识别度与现代感) */
   --user-bubble-text: #ffffff;/* 用户消息纯白字 */
 
-  --primary-color: #2563eb;   /* 品牌蓝 */
+  --primary-color: #2563eb;   /* 品牌皇家蓝 */
   --primary-hover: #1d4ed8;
   --primary-light: rgba(37, 99, 235, 0.08);
 
@@ -59,8 +59,8 @@
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
   
-  --user-bubble-bg: #f1f5f9;  /* 夜间用户气泡 */
-  --user-bubble-text: #131926;
+  --user-bubble-bg: #3b82f6;  /* 夜间用户气泡：高亮天空蓝 */
+  --user-bubble-text: #ffffff;
   
   --primary-color: #60a5fa;
   --primary-hover: #93c5fd;

@@ -59,7 +59,7 @@ export const KbRightSidebar: React.FC = () => {
         width: isOpen ? '340px' : '0px',
         opacity: isOpen ? 1 : 0,
         height: '100%',
-        backgroundColor: 'var(--bg-sidebar)', // 日间: #fafafa 原版底色, 夜间: #0d111a
+        backgroundColor: 'var(--bg-sidebar)',
         borderLeft: isOpen ? '1px solid var(--border-color)' : 'none',
         display: 'flex',
         flexDirection: 'column',
@@ -75,11 +75,11 @@ export const KbRightSidebar: React.FC = () => {
       <div style={{ width: '340px', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {isAiMode ? (
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }}>
-            {/* AI 模式内容区 */}
+            {/* AI 模式内容区：顶部与主编辑器 H1 标题保持同一物理对齐线 */}
             <div
               style={{
                 flex: 1,
-                padding: '16px 16px 12px 16px',
+                padding: '24px 16px 12px 16px',
                 overflowY: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
@@ -101,7 +101,7 @@ export const KbRightSidebar: React.FC = () => {
                     style={{
                       fontSize: '18px',
                       fontWeight: 600,
-                      color: 'var(--text-primary)', // 日间: #1f1f1f
+                      color: 'var(--text-primary)',
                       margin: 0,
                       letterSpacing: '-0.2px',
                     }}
@@ -120,7 +120,7 @@ export const KbRightSidebar: React.FC = () => {
               )}
             </div>
 
-            {/* AI 模式底部大圆角 Input 框（日间100%保持原版 #ffffff 精细卡片配色，夜间模式精准覆盖适配） */}
+            {/* AI 模式底部大圆角 Input 框 (与 Header AI 按钮与全站风格 100% 统一) */}
             <div
               style={{
                 padding: '0 12px 14px 12px',
@@ -136,7 +136,7 @@ export const KbRightSidebar: React.FC = () => {
                     bottom: '80px',
                     left: '16px',
                     width: '200px',
-                    backgroundColor: 'var(--bg-card)', // 日间: #ffffff
+                    backgroundColor: 'var(--bg-card)',
                     border: '1px solid var(--border-color)',
                     borderRadius: '12px',
                     boxShadow: 'var(--shadow-md)',
@@ -155,8 +155,8 @@ export const KbRightSidebar: React.FC = () => {
                         padding: '7px 10px',
                         fontSize: '12px',
                         fontWeight: selectedModel === model ? 600 : 400,
-                        color: selectedModel === model ? 'var(--text-primary)' : 'var(--text-secondary)',
-                        backgroundColor: selectedModel === model ? 'var(--bg-hover)' : 'transparent',
+                        color: selectedModel === model ? 'var(--primary-color)' : 'var(--text-primary)',
+                        backgroundColor: selectedModel === model ? 'var(--primary-light)' : 'transparent',
                         borderRadius: '6px',
                         cursor: 'pointer',
                         display: 'flex',
@@ -166,7 +166,7 @@ export const KbRightSidebar: React.FC = () => {
                       }}
                     >
                       <span>{model}</span>
-                      {selectedModel === model && <Icon name="check" size={12} color="var(--text-primary)" />}
+                      {selectedModel === model && <Icon name="check" size={12} color="var(--primary-color)" />}
                     </div>
                   ))}
                 </div>
@@ -175,7 +175,7 @@ export const KbRightSidebar: React.FC = () => {
               {/* 大圆角悬浮 Card 外框 */}
               <div
                 style={{
-                  backgroundColor: 'var(--bg-card)', // 日间: #ffffff, 夜间: #131926
+                  backgroundColor: 'var(--bg-card)',
                   border: '1px solid var(--border-color)',
                   borderRadius: '20px',
                   padding: '12px 14px 10px 14px',
@@ -203,7 +203,7 @@ export const KbRightSidebar: React.FC = () => {
                     outline: 'none',
                     backgroundColor: 'transparent',
                     fontSize: '14px',
-                    color: 'var(--text-primary)', // 日间: #1f1f1f
+                    color: 'var(--text-primary)',
                   }}
                 />
 
@@ -219,7 +219,7 @@ export const KbRightSidebar: React.FC = () => {
                         width: '20px',
                         height: '20px',
                         cursor: 'pointer',
-                        color: 'var(--text-primary)',
+                        color: 'var(--text-secondary)',
                         fontSize: '16px',
                         fontWeight: 500,
                       }}
@@ -230,7 +230,7 @@ export const KbRightSidebar: React.FC = () => {
                     {/* 垂直分割线 | */}
                     <div style={{ width: '1px', height: '12px', backgroundColor: 'var(--border-color)' }} />
 
-                    {/* 模型选择胶囊 */}
+                    {/* 模型选择胶囊：采用紫罗兰发光底与 Header AI 按钮完全呼应 */}
                     <div
                       onClick={() => setShowModelMenu(!showModelMenu)}
                       style={{
@@ -240,16 +240,16 @@ export const KbRightSidebar: React.FC = () => {
                         padding: '4px 10px',
                         fontSize: '12px',
                         fontWeight: 500,
-                        color: 'var(--text-primary)', // 日间: #1f1f1f
-                        backgroundColor: 'var(--bg-hover)', // 日间: #f3f4f6
+                        color: 'var(--primary-color)',
+                        backgroundColor: 'var(--primary-light)',
                         borderRadius: '12px',
                         cursor: 'pointer',
                         transition: 'var(--transition-smooth)',
                       }}
                     >
-                      <Icon name="sparkles" size={12} color="var(--text-primary)" />
+                      <Icon name="sparkles" size={12} color="var(--primary-color)" />
                       <span>{selectedModel}</span>
-                      <Icon name="chevron-right" size={10} color="var(--text-muted)" />
+                      <Icon name="chevron-right" size={10} color="var(--primary-color)" />
                     </div>
 
                     {/* ... 更多 */}
@@ -269,8 +269,8 @@ export const KbRightSidebar: React.FC = () => {
                       width: '28px',
                       height: '28px',
                       borderRadius: '50%',
-                      backgroundColor: inputValue.trim() ? 'var(--text-primary)' : 'var(--bg-hover)', // 日间: #1f1f1f / #f3f4f6
-                      color: inputValue.trim() ? 'var(--bg-card)' : 'var(--text-muted)', // 日间: #ffffff / #9ca3af
+                      backgroundColor: inputValue.trim() ? 'var(--primary-color)' : 'var(--bg-hover)',
+                      color: inputValue.trim() ? '#ffffff' : 'var(--text-muted)',
                       border: 'none',
                       cursor: inputValue.trim() ? 'pointer' : 'default',
                       transition: 'var(--transition-smooth)',

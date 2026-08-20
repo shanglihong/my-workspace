@@ -120,7 +120,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
           })}
         </div>
 
-        {/* 底部工具区：日间/夜间模式、回收站与设置 */}
+        {/* 底部工具区：日间/夜间模式切换与设置 (已成功移除回收站 Icon) */}
         <div
           style={{
             width: '100%',
@@ -137,12 +137,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
             tooltip={theme === 'dark' ? '切换为日间模式' : '切换为夜间模式'}
             onClick={toggleTheme}
           />
-          <SidebarIconButton icon="trash" tooltip="回收站" />
           <SidebarIconButton icon="settings" tooltip="设置" />
         </div>
       </aside>
 
-      {/* 2. 二级知识库目录 Drawer Panel（结合 isOpen 属性实现平滑 width 0px <-> 230px 伸展与收缩动效） */}
+      {/* 2. 二级知识库目录 Drawer Panel Panel */}
       <SidebarKbDrawer
         isOpen={isKbDrawerOpen}
         searchQuery={searchQuery}
