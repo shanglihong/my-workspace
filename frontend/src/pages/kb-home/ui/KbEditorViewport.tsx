@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLayout } from '@/app/providers/LayoutProvider';
+import { useLayout } from '@/entities/layout';
 import { DocEditor } from 'my-doc-editor';
 import 'my-doc-editor/dist/my-doc-editor.css';
 import { KbRightSidebar } from './right-sidebar/KbRightSidebar';

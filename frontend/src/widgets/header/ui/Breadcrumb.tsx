@@ -4,7 +4,7 @@ import { Icon } from '@/shared/ui';
 
 interface BreadcrumbProps {
   items: BreadcrumbItem[];
-  onSelect: (nodeId: string) => void;
+  onSelect: (nodeId: string, index: number) => void;
 }
 
 export const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, onSelect }) => {
@@ -19,11 +19,11 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, onSelect }) => {
           )}
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <span
-              onClick={() => onSelect(item.id)}
+              onClick={() => onSelect(item.id, index)}
               style={{
                 cursor: 'pointer',
                 color: item.isLast ? 'var(--text-primary)' : 'var(--text-muted)',
-                fontWeight: 400, // 恢复原本清秀不加粗的标准字重
+                fontWeight: 400,
                 padding: index === 0 ? '2px 4px 2px 0px' : '2px 4px',
                 borderRadius: 'var(--radius-sm)',
                 transition: 'var(--transition-smooth)',

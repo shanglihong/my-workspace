@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useLayout } from '@/app/providers/LayoutProvider';
+import { useLayout } from '@/entities/layout';
 import { updateNodeInTree } from '@/entities/navigation';
 
 export type PluginTabType = 'import' | 'export' | 'apps';

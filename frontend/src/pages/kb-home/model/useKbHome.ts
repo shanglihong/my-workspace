@@ -1,4 +1,4 @@
-import { useLayout } from '@/app/providers/LayoutProvider';
+import { useLayout } from '@/entities/layout';
 import { IconName } from '@/shared/ui';
 
 export interface KbQuickAccessItem {

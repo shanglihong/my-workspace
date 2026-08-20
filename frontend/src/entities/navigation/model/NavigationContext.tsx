@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
 import { NavNode, BreadcrumbItem } from './types';
 import { calculateBreadcrumbPath, findNodePath, updateNodeInTree } from './navigationModel';
-import { mockNavigationTree } from '@/mock';
 
 interface NavigationContextValue {
   navigationTree: NavNode[];
@@ -16,8 +15,14 @@ interface NavigationContextValue {
 
 const NavigationContext = createContext<NavigationContextValue | null>(null);
 
-export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [navigationTree, setNavigationTree] = useState<NavNode[]>(mockNavigationTree);
+export interface NavigationProviderProps {
+  children: React.ReactNode;
+  initialTree?: NavNode[];
+}
+
+export const NavigationProvider: React.FC<NavigationProviderProps> = ({ children, initialTree = [] }) => {
+  const [navigationTree, setNavigationTree] = useState<NavNode[]>(initialTree);
+
   // 避免在没有选中的情况下默认选中第一个节点，初始化设为空字符串
   const [activeNodeId, setActiveNodeId] = useState<string>('');
 

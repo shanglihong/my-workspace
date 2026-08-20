@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { ThemeMode } from '@/entities/layout';
 
-export type ThemeMode = 'light' | 'dark';
+export type { ThemeMode };
+
 const THEME_STORAGE_KEY = 'app_theme_mode';
 
 export function useTheme(defaultTheme: ThemeMode = 'light') {

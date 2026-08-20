@@ -3,7 +3,7 @@ import { CreateDocButtonGroup } from '@/features';
 import { useKbHome } from '../model/useKbHome';
 import { KbStatHeader } from './KbStatHeader';
 import { Icon } from '@/shared/ui';
-import { useLayout } from '@/app/providers/LayoutProvider';
+import { useLayout } from '@/entities/layout';
 
 export const KbHomePage: React.FC = () => {
   const { quickAccessItems, setActiveNodeId } = useKbHome();

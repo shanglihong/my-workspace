@@ -5,6 +5,7 @@ export interface SidebarIconButtonProps {
   icon: IconName;
   tooltip: string;
   onClick?: () => void;
+  isActive?: boolean;
   className?: string;
 }
 
@@ -12,6 +13,7 @@ export const SidebarIconButton: React.FC<SidebarIconButtonProps> = ({
   icon,
   tooltip,
   onClick,
+  isActive = false,
   className = '',
 }) => {
   return (
@@ -28,10 +30,15 @@ export const SidebarIconButton: React.FC<SidebarIconButtonProps> = ({
           borderRadius: 'var(--radius-md)',
           cursor: 'pointer',
           transition: 'var(--transition-smooth)',
-          color: 'var(--text-secondary)',
+          color: isActive ? 'var(--primary-color)' : 'var(--text-secondary)',
+          backgroundColor: isActive ? 'var(--primary-light)' : 'transparent',
         }}
-        onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--bg-hover)')}
-        onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
+        onMouseEnter={e => {
+          if (!isActive) e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
+        }}
+        onMouseLeave={e => {
+          if (!isActive) e.currentTarget.style.backgroundColor = 'transparent';
+        }}
       >
         <Icon name={icon} size={16} />
       </div>

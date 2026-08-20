@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Icon } from '@/shared/ui';
-import { useLayout } from '@/app/providers/LayoutProvider';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Icon, SelectDropdown, SelectOption } from '@/shared/ui';
+import { useLayout } from '@/entities/layout';
 import { useAiChat } from './model/useAiChat';
 import { AiMessageItem } from './ui/AiMessageItem';
 import { PluginContent } from './ui/PluginContent';
@@ -21,6 +21,15 @@ export const KbRightSidebar: React.FC = () => {
   } = useAiChat(activeNode?.title);
 
   const [showModelMenu, setShowModelMenu] = useState<boolean>(false);
+
+  // 转换为通用的 SelectOption 结构
+  const modelOptions: SelectOption[] = useMemo(() => {
+    return availableModels.map(m => ({
+      value: m,
+      label: m,
+      icon: 'sparkles',
+    }));
+  }, [availableModels]);
 
   // 点击全页面任意其他地方，自动平滑收缩侧边栏
   useEffect(() => {
@@ -75,7 +84,7 @@ export const KbRightSidebar: React.FC = () => {
       <div style={{ width: '340px', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {isAiMode ? (
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }}>
-            {/* AI 模式内容区：顶部与主编辑器 H1 标题保持同一物理对齐线 */}
+            {/* AI 模式内容区 */}
             <div
               style={{
                 flex: 1,
@@ -120,7 +129,7 @@ export const KbRightSidebar: React.FC = () => {
               )}
             </div>
 
-            {/* AI 模式底部大圆角 Input 框 (与 Header AI 按钮与全站风格 100% 统一) */}
+            {/* AI 模式底部大圆角 Input 框（重构调用通用 SelectDropdown UI） */}
             <div
               style={{
                 padding: '0 12px 14px 12px',
@@ -128,50 +137,6 @@ export const KbRightSidebar: React.FC = () => {
                 position: 'relative',
               }}
             >
-              {/* 模型选择器 Popup 浮窗 */}
-              {showModelMenu && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    bottom: '80px',
-                    left: '16px',
-                    width: '200px',
-                    backgroundColor: 'var(--bg-card)',
-                    border: '1px solid var(--border-color)',
-                    borderRadius: '12px',
-                    boxShadow: 'var(--shadow-md)',
-                    padding: '4px',
-                    zIndex: 20,
-                  }}
-                >
-                  {availableModels.map(model => (
-                    <div
-                      key={model}
-                      onClick={() => {
-                        setSelectedModel(model);
-                        setShowModelMenu(false);
-                      }}
-                      style={{
-                        padding: '7px 10px',
-                        fontSize: '12px',
-                        fontWeight: selectedModel === model ? 600 : 400,
-                        color: selectedModel === model ? 'var(--primary-color)' : 'var(--text-primary)',
-                        backgroundColor: selectedModel === model ? 'var(--primary-light)' : 'transparent',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        transition: 'var(--transition-smooth)',
-                      }}
-                    >
-                      <span>{model}</span>
-                      {selectedModel === model && <Icon name="check" size={12} color="var(--primary-color)" />}
-                    </div>
-                  ))}
-                </div>
-              )}
-
               {/* 大圆角悬浮 Card 外框 */}
               <div
                 style={{
@@ -183,6 +148,7 @@ export const KbRightSidebar: React.FC = () => {
                   flexDirection: 'column',
                   gap: '10px',
                   boxShadow: 'var(--shadow-md)',
+                  position: 'relative',
                 }}
               >
                 {/* 第一行：输入文本框 */}
@@ -208,8 +174,8 @@ export const KbRightSidebar: React.FC = () => {
                 />
 
                 {/* 第二行：底层工具栏 */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative' }}>
                     {/* + 加号 */}
                     <div
                       style={{
@@ -230,26 +196,39 @@ export const KbRightSidebar: React.FC = () => {
                     {/* 垂直分割线 | */}
                     <div style={{ width: '1px', height: '12px', backgroundColor: 'var(--border-color)' }} />
 
-                    {/* 模型选择胶囊：采用紫罗兰发光底与 Header AI 按钮完全呼应 */}
-                    <div
-                      onClick={() => setShowModelMenu(!showModelMenu)}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '5px',
-                        padding: '4px 10px',
-                        fontSize: '12px',
-                        fontWeight: 500,
-                        color: 'var(--primary-color)',
-                        backgroundColor: 'var(--primary-light)',
-                        borderRadius: '12px',
-                        cursor: 'pointer',
-                        transition: 'var(--transition-smooth)',
-                      }}
-                    >
-                      <Icon name="sparkles" size={12} color="var(--primary-color)" />
-                      <span>{selectedModel}</span>
-                      <Icon name="chevron-right" size={10} color="var(--primary-color)" />
+                    {/* 模型选择胶囊：点击唤起通用 SelectDropdown 下拉组件 */}
+                    <div style={{ position: 'relative' }}>
+                      <div
+                        onClick={() => setShowModelMenu(prev => !prev)}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                          padding: '4px 10px',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          color: 'var(--primary-color)',
+                          backgroundColor: 'var(--primary-light)',
+                          borderRadius: '12px',
+                          cursor: 'pointer',
+                          transition: 'var(--transition-smooth)',
+                        }}
+                      >
+                        <Icon name="sparkles" size={12} color="var(--primary-color)" />
+                        <span>{selectedModel}</span>
+                        <Icon name="chevron-right" size={10} color="var(--primary-color)" />
+                      </div>
+
+                      {/* 调用 shared/ui 通用 SelectDropdown 组件 */}
+                      <SelectDropdown
+                        isOpen={showModelMenu}
+                        onClose={() => setShowModelMenu(false)}
+                        options={modelOptions}
+                        value={selectedModel}
+                        onChange={val => setSelectedModel(val)}
+                        position="top-left"
+                        width="180px"
+                      />
                     </div>
 
                     {/* ... 更多 */}

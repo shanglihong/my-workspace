@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigation } from '@/entities/navigation';
-import { useLayout } from '@/app/providers/LayoutProvider';
+import { useLayout } from '@/entities/layout';
 import { KbTreeNavigation } from '@/features';
 import { Icon } from '@/shared/ui';
 

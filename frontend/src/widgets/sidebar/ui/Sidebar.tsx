@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLayout } from '@/app/providers/LayoutProvider';
+import { useLayout } from '@/entities/layout';
 import { SidebarIconButton } from './SidebarIconButton';
 import { SidebarKbDrawer } from './SidebarKbDrawer';
 import { useSidebarMenu } from '../model/useSidebarMenu';
@@ -13,6 +13,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
   const { theme, toggleTheme, activeView, setActiveView } = useLayout();
   const { mainMenuItems, isKbDrawerOpen, searchQuery, setSearchQuery, handleMenuClick, closeKbDrawer } =
     useSidebarMenu();
+
+  const handleOpenSettings = () => {
+    setActiveView('settings');
+    closeKbDrawer();
+  };
 
   return (
     <div style={{ display: 'flex', height: '100vh', flexShrink: 0 }} className={className}>
@@ -120,7 +125,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
           })}
         </div>
 
-        {/* 底部工具区：日间/夜间模式切换与设置 (已成功移除回收站 Icon) */}
+        {/* 底部工具区：日间/夜间模式切换与设置 (点击设置跳转至设置页面) */}
         <div
           style={{
             width: '100%',
@@ -137,11 +142,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
             tooltip={theme === 'dark' ? '切换为日间模式' : '切换为夜间模式'}
             onClick={toggleTheme}
           />
-          <SidebarIconButton icon="settings" tooltip="设置" />
+          <SidebarIconButton
+            icon="settings"
+            tooltip="设置"
+            onClick={handleOpenSettings}
+            isActive={activeView === 'settings'}
+          />
         </div>
       </aside>
 
-      {/* 2. 二级知识库目录 Drawer Panel Panel */}
+      {/* 2. 二级知识库目录 Drawer Panel */}
       <SidebarKbDrawer
         isOpen={isKbDrawerOpen}
         searchQuery={searchQuery}

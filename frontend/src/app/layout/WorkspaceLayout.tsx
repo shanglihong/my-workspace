@@ -9,6 +9,7 @@ const KbHomePage = lazy(() => import('@/pages/kb-home').then(m => ({ default: m.
 const GlobalHomePage = lazy(() => import('@/pages/global-home').then(m => ({ default: m.GlobalHomePage })));
 const TasksPage = lazy(() => import('@/pages/tasks').then(m => ({ default: m.TasksPage })));
 const ToolboxPage = lazy(() => import('@/pages/toolbox').then(m => ({ default: m.ToolboxPage })));
+const SettingsPage = lazy(() => import('@/pages/settings').then(m => ({ default: m.SettingsPage })));
 
 export const WorkspaceLayout: React.FC = () => {
   const { activeView } = useLayout();
@@ -28,6 +29,8 @@ export const WorkspaceLayout: React.FC = () => {
               return <ToolboxPage />;
             case 'drive':
               return <CloudDrivePage />;
+            case 'settings':
+              return <SettingsPage />;
             default:
               return <KbEditorViewport />;
           }

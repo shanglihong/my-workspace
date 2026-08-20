@@ -2,7 +2,7 @@ import React from 'react';
 import { DocSearchInput, CreateDocButtonGroup } from '@/features';
 import { useGlobalHome } from '../model/useGlobalHome';
 import { GlobalHomeRecentDocs } from './GlobalHomeRecentDocs';
-import { useLayout } from '@/app/providers/LayoutProvider';
+import { useLayout } from '@/entities/layout';
 
 export const GlobalHomePage: React.FC = () => {
   const { recentDocs, handleSelectSearchResult } = useGlobalHome();

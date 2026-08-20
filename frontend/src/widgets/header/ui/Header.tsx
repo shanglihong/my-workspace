@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLayout } from '@/app/providers/LayoutProvider';
+import { useLayout } from '@/entities/layout';
 import { Breadcrumb } from './Breadcrumb';
 import { HeaderNotificationsPopover } from './HeaderNotificationsPopover';
 import { useHeaderNotice } from '../model/useHeaderNotice';
@@ -21,7 +21,7 @@ export const Header: React.FC<HeaderProps> = ({
   isAiActive: externalAiActive,
   onToggleAi,
 }) => {
-  const { setActiveNodeId, rightDrawerType, toggleRightDrawer } = useLayout();
+  const { setActiveNodeId, setActiveView, closeKbDrawer, rightDrawerType, toggleRightDrawer } = useLayout();
   const { isNoticeOpen, unreadCount, notifications, toggleNotice, closeNotice, markAllAsRead } = useHeaderNotice();
   const { headerContent, activeView } = useHeaderBreadcrumb();
 
@@ -42,6 +42,16 @@ export const Header: React.FC<HeaderProps> = ({
     } else {
       toggleRightDrawer('ai');
     }
+  };
+
+  // 点击面包屑处理：如果点击的是首个 Root 节点 "工作台" (index === 0)，直接切回系统首页并将知识库目录顺畅收起
+  const handleBreadcrumbSelect = (nodeId: string, index: number) => {
+    if (index === 0) {
+      setActiveView('home');
+      closeKbDrawer();
+      return;
+    }
+    setActiveNodeId(nodeId);
   };
 
   return (
@@ -65,7 +75,7 @@ export const Header: React.FC<HeaderProps> = ({
     >
       {/* 左侧：面包屑导航与状态描述 */}
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2px', minWidth: 0 }}>
-        <Breadcrumb items={headerContent.breadcrumb} onSelect={nodeId => setActiveNodeId(nodeId)} />
+        <Breadcrumb items={headerContent.breadcrumb} onSelect={handleBreadcrumbSelect} />
         <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
           <span>{headerContent.subText}</span>
         </div>
@@ -76,7 +86,7 @@ export const Header: React.FC<HeaderProps> = ({
         {/* 仅在文档编辑场景 (activeView === 'editor') 展示插件按钮与 AI 按钮 */}
         {activeView === 'editor' && (
           <>
-            {/* 插件按钮（带 data-drawer-trigger 避免与其他区域点击冲突） */}
+            {/* 插件按钮 */}
             <button
               data-drawer-trigger="true"
               onClick={handlePluginClick}

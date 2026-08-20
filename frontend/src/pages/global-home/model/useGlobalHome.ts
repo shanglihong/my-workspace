@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useLayout } from '@/app/providers/LayoutProvider';
+import { useLayout } from '@/entities/layout';
 import { searchNodes } from '@/entities/navigation';
 
 export const useGlobalHome = () => {

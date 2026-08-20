@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLayout } from '@/app/providers/LayoutProvider';
+import { useLayout } from '@/entities/layout';
 import { IconName } from '@/shared/ui';
 
 export interface MenuItem {
@@ -9,8 +9,7 @@ export interface MenuItem {
 }
 
 export const useSidebarMenu = () => {
-  const { activeView, setActiveView } = useLayout();
-  const [isKbDrawerOpen, setIsKbDrawerOpen] = useState<boolean>(false);
+  const { activeView, setActiveView, isKbDrawerOpen, setIsKbDrawerOpen, closeKbDrawer } = useLayout();
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const mainMenuItems: MenuItem[] = [
@@ -42,8 +41,6 @@ export const useSidebarMenu = () => {
       }
     }
   };
-
-  const closeKbDrawer = () => setIsKbDrawerOpen(false);
 
   return {
     mainMenuItems,
