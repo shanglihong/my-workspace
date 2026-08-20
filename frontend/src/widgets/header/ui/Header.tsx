@@ -10,12 +10,39 @@ export interface HeaderProps {
   className?: string;
   isPluginActive?: boolean;
   onTogglePlugin?: () => void;
+  isAiActive?: boolean;
+  onToggleAi?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ className = '', isPluginActive = false, onTogglePlugin }) => {
-  const { setActiveNodeId } = useLayout();
-  const { isNoticeOpen, unreadCount, notifications, toggleNotice, markAllAsRead } = useHeaderNotice();
+export const Header: React.FC<HeaderProps> = ({
+  className = '',
+  isPluginActive: externalPluginActive,
+  onTogglePlugin,
+  isAiActive: externalAiActive,
+  onToggleAi,
+}) => {
+  const { setActiveNodeId, rightDrawerType, toggleRightDrawer } = useLayout();
+  const { isNoticeOpen, unreadCount, notifications, toggleNotice, closeNotice, markAllAsRead } = useHeaderNotice();
   const { headerContent, activeView } = useHeaderBreadcrumb();
+
+  const isPluginActive = externalPluginActive ?? (rightDrawerType === 'plugin');
+  const isAiActive = externalAiActive ?? (rightDrawerType === 'ai');
+
+  const handlePluginClick = () => {
+    if (onTogglePlugin) {
+      onTogglePlugin();
+    } else {
+      toggleRightDrawer('plugin');
+    }
+  };
+
+  const handleAiClick = () => {
+    if (onToggleAi) {
+      onToggleAi();
+    } else {
+      toggleRightDrawer('ai');
+    }
+  };
 
   return (
     <header
@@ -36,7 +63,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '', isPluginActive =
         position: 'relative',
       }}
     >
-      {/* 左侧：上层面包屑导航，下层状态/副标题 */}
+      {/* 左侧：面包屑导航与状态描述 */}
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2px', minWidth: 0 }}>
         <Breadcrumb items={headerContent.breadcrumb} onSelect={nodeId => setActiveNodeId(nodeId)} />
         <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
@@ -44,37 +71,70 @@ export const Header: React.FC<HeaderProps> = ({ className = '', isPluginActive =
         </div>
       </div>
 
-      {/* 右侧：通知 Icon + 插件按钮 */}
+      {/* 右侧操作栏 */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative' }}>
-        {/* 文档编辑场景专属插件按钮 */}
+        {/* 仅在文档编辑场景 (activeView === 'editor') 展示插件按钮与 AI 按钮 */}
         {activeView === 'editor' && (
-          <button
-            onClick={onTogglePlugin}
-            title="扩展与素材同步中心"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              height: '28px',
-              padding: '0 10px',
-              fontSize: '12px',
-              fontWeight: 500,
-              color: 'var(--primary-color)',
-              backgroundColor: isPluginActive ? 'var(--primary-light)' : 'rgba(37, 99, 235, 0.05)',
-              border: isPluginActive ? '1px solid var(--primary-color)' : '1px solid rgba(37, 99, 235, 0.15)',
-              borderRadius: 'var(--radius-sm)',
-              cursor: 'pointer',
-              transition: 'all 0.15s ease',
-              outline: 'none',
-            }}
-          >
-            <Icon name="plugin" size={13} color="var(--primary-color)" />
-            <span>插件</span>
-          </button>
+          <>
+            {/* 插件按钮（带 data-drawer-trigger 避免与其他区域点击冲突） */}
+            <button
+              data-drawer-trigger="true"
+              onClick={handlePluginClick}
+              title="扩展与素材同步中心"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+                height: '28px',
+                padding: '0 12px',
+                fontSize: '12px',
+                fontWeight: 500,
+                color: 'var(--primary-color)',
+                backgroundColor: isPluginActive ? 'var(--primary-light)' : 'rgba(37, 99, 235, 0.05)',
+                border: isPluginActive ? '1px solid var(--primary-color)' : '1px solid rgba(37, 99, 235, 0.15)',
+                borderRadius: 'var(--radius-sm)',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+                outline: 'none',
+              }}
+            >
+              <Icon name="plugin" size={13} color="var(--primary-color)" />
+              <span>插件</span>
+            </button>
+
+            {/* AI 按钮 */}
+            <button
+              data-drawer-trigger="true"
+              onClick={handleAiClick}
+              title="AI 辅助对话"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+                height: '28px',
+                padding: '0 12px',
+                fontSize: '12px',
+                fontWeight: 500,
+                color: '#8b5cf6',
+                backgroundColor: isAiActive ? 'rgba(139, 92, 246, 0.18)' : 'rgba(139, 92, 246, 0.06)',
+                border: isAiActive ? '1px solid #8b5cf6' : '1px solid rgba(139, 92, 246, 0.2)',
+                borderRadius: 'var(--radius-sm)',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+                outline: 'none',
+              }}
+            >
+              <Icon name="sparkles" size={13} color="#8b5cf6" />
+              <span>AI</span>
+            </button>
+          </>
         )}
 
-        {/* 全局通知 Icon 按钮（突出目立的琥珀金底色与 Icon） */}
+        {/* 全局消息通知 Icon 按钮 */}
         <div
+          data-notice-trigger="true"
           onClick={toggleNotice}
           title="消息通知"
           style={{
@@ -88,7 +148,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '', isPluginActive =
             border: isNoticeOpen ? '1.5px solid #f59e0b' : '1px solid rgba(245, 158, 11, 0.35)',
             backgroundColor: isNoticeOpen ? 'rgba(245, 158, 11, 0.18)' : 'rgba(245, 158, 11, 0.1)',
             cursor: 'pointer',
-            transition: 'var(--transition-smooth)',
+            transition: 'all 0.15s ease',
           }}
         >
           <Icon name="bell" size={14} color="#d97706" />
@@ -114,6 +174,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '', isPluginActive =
             notifications={notifications}
             unreadCount={unreadCount}
             onMarkAllAsRead={markAllAsRead}
+            onClose={closeNotice}
           />
         )}
       </div>

@@ -22,13 +22,11 @@ export const usePluginSync = () => {
     };
   }, []);
 
-  // 模拟导入微信读书划线到当前文档
   const handleImportWeRead = () => {
     setImportStatus('正在同步微信读书划线...');
     registerTimeout(() => {
       if (activeNode) {
         const weReadClipping = `\n\n> **[微信读书划线归档]（同步于刚刚）**\n> “思考‘为什么’是所有创新与领导力的核心来源。人们买的不是你做的事，而是你做事的信念。”\n> —— 《黄金圈法则》第 3 章划线批注\n`;
-
 
         setNavigationTree(prevTree =>
           updateNodeInTree(prevTree, activeNode.id, node => ({
@@ -43,13 +41,11 @@ export const usePluginSync = () => {
     }, 600);
   };
 
-  // 模拟导入飞书云文档大纲素材
   const handleImportFeishu = () => {
     setImportStatus('正在拉取飞书云文档结构...');
     registerTimeout(() => {
       if (activeNode) {
         const feishuStructure = `\n\n### 飞书云文档同步素材\n- [x] 完成架构图评估\n- [ ] 协同编辑节点同步\n- [ ] 导出 PDF/Markdown\n`;
-
 
         setNavigationTree(prevTree =>
           updateNodeInTree(prevTree, activeNode.id, node => ({
@@ -64,7 +60,6 @@ export const usePluginSync = () => {
     }, 600);
   };
 
-  // 导出 Markdown
   const handleExportMarkdown = () => {
     if (!activeNode) return;
     const blob = new Blob([activeNode.content || ''], { type: 'text/markdown;charset=utf-8' });
@@ -78,7 +73,6 @@ export const usePluginSync = () => {
     registerTimeout(() => setExportStatus(null), 3000);
   };
 
-  // 导出为飞书
   const handleExportFeishu = () => {
     setExportStatus('同步中...');
     registerTimeout(() => {
@@ -99,4 +93,3 @@ export const usePluginSync = () => {
     handleExportFeishu,
   };
 };
-

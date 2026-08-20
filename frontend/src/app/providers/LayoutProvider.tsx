@@ -4,6 +4,7 @@ import { useLayoutToggle } from '@/features/layout-toggle';
 import { useTheme, ThemeMode } from '@/features/theme-switch';
 
 export type ActiveView = 'editor' | 'drive' | 'home' | 'kb-home' | 'tasks' | 'toolbox';
+export type RightDrawerType = 'ai' | 'plugin' | null;
 
 interface LayoutContextValue {
   isSidebarCollapsed: boolean;
@@ -24,6 +25,16 @@ interface LayoutContextValue {
   updateNodeContent: (nodeId: string, content: string) => void;
   activeView: ActiveView;
   setActiveView: (view: ActiveView) => void;
+
+  // 右侧侧边栏状态控制
+  rightDrawerType: RightDrawerType;
+  setRightDrawerType: (type: RightDrawerType) => void;
+  toggleRightDrawer: (type: 'ai' | 'plugin') => void;
+  closeRightDrawer: () => void;
+  isRightDrawerOpen: boolean;
+  isAiSidebarOpen: boolean;
+  toggleAiSidebar: () => void;
+  setAiSidebarOpen: (open: boolean) => void;
 }
 
 const LayoutContext = createContext<LayoutContextValue | null>(null);
@@ -36,9 +47,36 @@ const LayoutInnerProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isOutlineOpen, setIsOutlineOpen] = useState<boolean>(false);
   const [isReadMode, setIsReadMode] = useState<boolean>(false);
   const [activeView, setActiveView] = useState<ActiveView>('home');
+  const [rightDrawerType, setRightDrawerType] = useState<RightDrawerType>(null);
 
   const toggleOutline = useCallback(() => setIsOutlineOpen(prev => !prev), []);
   const toggleReadMode = useCallback(() => setIsReadMode(prev => !prev), []);
+
+  const closeRightDrawer = useCallback(() => {
+    setRightDrawerType(null);
+  }, []);
+
+  const toggleRightDrawer = useCallback((type: 'ai' | 'plugin') => {
+    setRightDrawerType(prev => {
+      const next = prev === type ? null : type;
+      if (next) {
+        setIsOutlineOpen(false);
+      }
+      return next;
+    });
+  }, []);
+
+  const toggleAiSidebar = useCallback(() => toggleRightDrawer('ai'), [toggleRightDrawer]);
+
+  const setAiSidebarOpen = useCallback((open: boolean) => {
+    setRightDrawerType(open ? 'ai' : null);
+    if (open) {
+      setIsOutlineOpen(false);
+    }
+  }, []);
+
+  const isAiSidebarOpen = rightDrawerType === 'ai';
+  const isRightDrawerOpen = rightDrawerType !== null;
 
   const handleSelectNodeId = useCallback(
     (id: string) => {
@@ -76,6 +114,14 @@ const LayoutInnerProvider: React.FC<{ children: React.ReactNode }> = ({ children
       updateNodeContent: nav.updateNodeContent,
       activeView,
       setActiveView,
+      rightDrawerType,
+      setRightDrawerType,
+      toggleRightDrawer,
+      closeRightDrawer,
+      isRightDrawerOpen,
+      isAiSidebarOpen,
+      toggleAiSidebar,
+      setAiSidebarOpen,
     }),
     [
       isCollapsed,
@@ -96,6 +142,14 @@ const LayoutInnerProvider: React.FC<{ children: React.ReactNode }> = ({ children
       nav.updateNodeContent,
       activeView,
       setActiveView,
+      rightDrawerType,
+      setRightDrawerType,
+      toggleRightDrawer,
+      closeRightDrawer,
+      isRightDrawerOpen,
+      isAiSidebarOpen,
+      toggleAiSidebar,
+      setAiSidebarOpen,
     ]
   );
 
@@ -117,4 +171,3 @@ export function useLayout() {
   }
   return context;
 }
-

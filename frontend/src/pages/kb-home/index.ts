@@ -1,5 +1,3 @@
 export * from './ui/KbHomePage';
-export { KbTreeNavigation } from './ui/KbTreeNavigation';
-export { KbEditorViewport } from './ui/KbEditorViewport';
-
-
+export * from './ui/KbEditorViewport';
+export * from './ui/right-sidebar/KbRightSidebar';

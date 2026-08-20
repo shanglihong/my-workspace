@@ -82,7 +82,7 @@ export const KbTreeNavigation: React.FC<KbTreeNavigationProps> = ({
   const renderNode = (node: NavNode, depth = 0) => {
     if (node.id === 'doc-shouye') return null;
 
-    const isExpanded = !!expandedIds[node.id];
+    const isExpanded = filterQuery.trim() ? true : !!expandedIds[node.id];
     const isActive = activeView === 'editor' && node.id === activeNodeId;
     const hasChildren = node.children && node.children.length > 0;
 
@@ -110,9 +110,20 @@ export const KbTreeNavigation: React.FC<KbTreeNavigationProps> = ({
             <Icon name={getNodeIcon(node.type)} size={16} color={getNodeIconColor(node.type)} />
           </div>
 
-          {hasChildren && isExpanded && (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-              {node.children!.map(child => renderNode(child, depth + 1))}
+          {hasChildren && (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateRows: isExpanded ? '1fr' : '0fr',
+                opacity: isExpanded ? 1 : 0,
+                transition: 'grid-template-rows 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                overflow: 'hidden',
+                width: '100%',
+              }}
+            >
+              <div style={{ minHeight: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                {node.children!.map(child => renderNode(child, depth + 1))}
+              </div>
             </div>
           )}
         </div>
@@ -149,9 +160,11 @@ export const KbTreeNavigation: React.FC<KbTreeNavigationProps> = ({
                 height: '16px',
                 marginRight: '4px',
                 color: 'var(--text-muted)',
+                transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+                transition: 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
             >
-              <Icon name={isExpanded ? 'chevron-down' : 'chevron-right'} size={12} />
+              <Icon name="chevron-right" size={12} />
             </span>
           ) : (
             <span style={{ width: '20px' }} />
@@ -179,9 +192,20 @@ export const KbTreeNavigation: React.FC<KbTreeNavigationProps> = ({
           )}
         </div>
 
-        {hasChildren && isExpanded && (
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {node.children!.map(child => renderNode(child, depth + 1))}
+        {/* 子节点列表：纯 CSS Grid 贝塞尔平滑伸展展开与折叠收缩 */}
+        {hasChildren && (
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateRows: isExpanded ? '1fr' : '0fr',
+              opacity: isExpanded ? 1 : 0,
+              transition: 'grid-template-rows 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+              overflow: 'hidden',
+            }}
+          >
+            <div style={{ minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+              {node.children!.map(child => renderNode(child, depth + 1))}
+            </div>
           </div>
         )}
       </div>

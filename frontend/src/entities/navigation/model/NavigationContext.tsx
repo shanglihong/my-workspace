@@ -18,13 +18,15 @@ const NavigationContext = createContext<NavigationContextValue | null>(null);
 
 export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [navigationTree, setNavigationTree] = useState<NavNode[]>(mockNavigationTree);
-  const [activeNodeId, setActiveNodeId] = useState<string>('doc-dianying');
+  // 避免在没有选中的情况下默认选中第一个节点，初始化设为空字符串
+  const [activeNodeId, setActiveNodeId] = useState<string>('');
 
   const breadcrumbPath = useMemo(() => {
     return calculateBreadcrumbPath(navigationTree, activeNodeId);
   }, [navigationTree, activeNodeId]);
 
   const activeNode = useMemo(() => {
+    if (!activeNodeId) return null;
     const path = findNodePath(navigationTree, activeNodeId);
     return path ? path[path.length - 1] : null;
   }, [navigationTree, activeNodeId]);

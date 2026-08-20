@@ -9,7 +9,7 @@ export interface MenuItem {
 }
 
 export const useSidebarMenu = () => {
-  const { setActiveView } = useLayout();
+  const { activeView, setActiveView } = useLayout();
   const [isKbDrawerOpen, setIsKbDrawerOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -24,7 +24,10 @@ export const useSidebarMenu = () => {
   const handleMenuClick = (itemId: string) => {
     if (itemId === 'nav-kb') {
       setIsKbDrawerOpen(prev => !prev);
-      setActiveView('kb-home');
+      // 若当前已在文档编辑视图 (activeView === 'editor')，保持当前编辑视图，绝不跳转 kb-home 页面
+      if (activeView !== 'editor') {
+        setActiveView('kb-home');
+      }
     } else {
       setIsKbDrawerOpen(false);
 

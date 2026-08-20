@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Icon } from '@/shared/ui';
 import { NotificationItem } from '../model/useHeaderNotice';
 
@@ -6,15 +6,43 @@ export interface HeaderNotificationsPopoverProps {
   notifications: NotificationItem[];
   unreadCount: number;
   onMarkAllAsRead: () => void;
+  onClose?: () => void;
 }
 
 export const HeaderNotificationsPopover: React.FC<HeaderNotificationsPopoverProps> = ({
   notifications,
   unreadCount,
   onMarkAllAsRead,
+  onClose,
 }) => {
+  const popoverRef = useRef<HTMLDivElement | null>(null);
+
+  // 监听点击消息浮窗外部区域，自动平滑收缩关闭
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popoverRef.current && popoverRef.current.contains(event.target as Node)) {
+        return;
+      }
+      const target = event.target as HTMLElement;
+      // 忽略 Header 的消息 bell 图标本身
+      if (target.closest('[title="消息通知"]')) {
+        return;
+      }
+      if (onClose) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClose]);
+
   return (
     <div
+      ref={popoverRef}
+      className="popover-animate-enter"
       style={{
         position: 'absolute',
         top: '36px',

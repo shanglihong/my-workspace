@@ -36,6 +36,7 @@ export type IconName =
   | 'bell'
   | 'toolbox'
   | 'logo-brand'
+  | 'arrow-up'
   | 'close';
 
 interface IconProps {
@@ -53,6 +54,16 @@ export const Icon: React.FC<IconProps> = ({ name, size = 16, color = 'currentCol
         return (
           <path
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        );
+      case 'arrow-up':
+        return (
+          <path
+            d="M5 10l7-7 7 7M12 3v18"
             stroke={color}
             strokeWidth="2"
             strokeLinecap="round"

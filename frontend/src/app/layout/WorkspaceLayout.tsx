@@ -1,8 +1,7 @@
-import React, { useState, lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { useLayout } from '@/app/providers/LayoutProvider';
 import { Sidebar } from '@/widgets/sidebar';
 import { Header } from '@/widgets/header';
-import { PluginDrawer } from '@/widgets/plugin-drawer';
 import { KbEditorViewport } from '@/pages/kb-home';
 
 const CloudDrivePage = lazy(() => import('@/pages/cloud-drive').then(m => ({ default: m.CloudDrivePage })));
@@ -12,7 +11,6 @@ const TasksPage = lazy(() => import('@/pages/tasks').then(m => ({ default: m.Tas
 const ToolboxPage = lazy(() => import('@/pages/toolbox').then(m => ({ default: m.ToolboxPage })));
 
 export const WorkspaceLayout: React.FC = () => {
-  const [isPluginDrawerOpen, setIsPluginDrawerOpen] = useState<boolean>(false);
   const { activeView } = useLayout();
 
   const renderMainContent = () => {
@@ -45,12 +43,9 @@ export const WorkspaceLayout: React.FC = () => {
 
       {/* 主视图与顶栏结构 */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
-        <Header isPluginActive={isPluginDrawerOpen} onTogglePlugin={() => setIsPluginDrawerOpen(prev => !prev)} />
+        <Header />
         {renderMainContent()}
       </div>
-
-      {/* 右侧：素材与插件同步侧边栏/抽屉 */}
-      <PluginDrawer isOpen={isPluginDrawerOpen} onClose={() => setIsPluginDrawerOpen(false)} />
     </div>
   );
 };

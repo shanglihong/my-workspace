@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLayout } from '@/app/providers/LayoutProvider';
 import { DocEditor } from 'my-doc-editor';
 import 'my-doc-editor/dist/my-doc-editor.css';
+import { KbRightSidebar } from './right-sidebar/KbRightSidebar';
 
 export interface KbEditorViewportProps {
   className?: string;
@@ -10,12 +11,34 @@ export interface KbEditorViewportProps {
 export const KbEditorViewport: React.FC<KbEditorViewportProps> = ({ className = '' }) => {
   const { activeNode, theme, updateNodeContent } = useLayout();
   const [docContent, setDocContent] = useState<string>(activeNode?.content || '');
+  const [isScrolling, setIsScrolling] = useState<boolean>(false);
+  const scrollTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (activeNode) {
       setDocContent(activeNode.content || '');
+      setIsScrolling(false);
     }
   }, [activeNode?.id, activeNode?.content]);
+
+  // 严格监听滚动：滚动时即刻呈现，不滚动 800ms 后立刻消失
+  const handleScroll = () => {
+    setIsScrolling(true);
+    if (scrollTimerRef.current !== null) {
+      window.clearTimeout(scrollTimerRef.current);
+    }
+    scrollTimerRef.current = window.setTimeout(() => {
+      setIsScrolling(false);
+    }, 800);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (scrollTimerRef.current !== null) {
+        window.clearTimeout(scrollTimerRef.current);
+      }
+    };
+  }, []);
 
   if (!activeNode) {
     return (
@@ -33,13 +56,21 @@ export const KbEditorViewport: React.FC<KbEditorViewportProps> = ({ className = 
         height: 'calc(100vh - var(--header-height))',
         backgroundColor: 'var(--bg-card)',
         display: 'flex',
-        flexDirection: 'column',
         overflow: 'hidden',
         position: 'relative',
       }}
     >
-      {/* 纯粹铺满的核心 Editor / Canvas 区域 */}
-      <div style={{ flex: 1, width: '100%', height: '100%', padding: '0 0px 0px 0px', overflow: 'auto' }}>
+      {/* 核心 Editor 容器：仅在触发滚动 (isScrolling) 时显现滚动条，不滚动时彻底隐藏 */}
+      <div
+        onScroll={handleScroll}
+        className={`doc-editor-viewport-scroll ${isScrolling ? 'is-scrolling' : ''}`}
+        style={{
+          flex: 1,
+          height: '100%',
+          overflowY: 'auto',
+          transition: 'var(--transition-smooth)',
+        }}
+      >
         {activeNode.type === 'chart' ? (
           <iframe
             src="/drawio/index.html"
@@ -60,6 +91,9 @@ export const KbEditorViewport: React.FC<KbEditorViewportProps> = ({ className = 
           </div>
         )}
       </div>
+
+      {/* 做到 kb 页面内部的侧边栏组件 */}
+      <KbRightSidebar />
     </div>
   );
 };

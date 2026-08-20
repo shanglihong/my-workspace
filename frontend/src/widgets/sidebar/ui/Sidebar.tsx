@@ -142,14 +142,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
         </div>
       </aside>
 
-      {/* 2. 二级知识库目录 Drawer Panel */}
-      {isKbDrawerOpen && (
-        <SidebarKbDrawer
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          onClose={closeKbDrawer}
-        />
-      )}
+      {/* 2. 二级知识库目录 Drawer Panel（结合 isOpen 属性实现平滑 width 0px <-> 230px 伸展与收缩动效） */}
+      <SidebarKbDrawer
+        isOpen={isKbDrawerOpen}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        onClose={closeKbDrawer}
+      />
     </div>
   );
 };

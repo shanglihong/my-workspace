@@ -35,7 +35,6 @@ export const ExportTab: React.FC<ExportTabProps> = ({ activeNode, onExportMarkdo
             当前选中：{activeNode.title} ({activeNode.type === 'chart' ? '架构导图' : 'Markdown文档'})
           </div>
 
-          {/* 导出 Markdown 卡片 */}
           <div
             style={{
               padding: '14px',
@@ -79,7 +78,6 @@ export const ExportTab: React.FC<ExportTabProps> = ({ activeNode, onExportMarkdo
             </button>
           </div>
 
-          {/* 同步导出至飞书云文档 */}
           <div
             style={{
               padding: '14px',

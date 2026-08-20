@@ -9,20 +9,21 @@ export interface ImportTabProps {
 export const ImportTab: React.FC<ImportTabProps> = ({ onImportWeRead, onImportFeishu }) => {
   return (
     <div style={{ flex: 1, overflowY: 'auto', padding: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-      <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+      <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.5' }}>
         从外部阅读平台与云文档一键导入划线批注、笔记与知识图谱：
       </div>
 
-      {/* 微信读书渠道卡片 */}
+      {/* 微信读书卡片 */}
       <div
         style={{
           padding: '14px',
           borderRadius: 'var(--radius-md)',
           border: '1px solid var(--border-color)',
-          backgroundColor: 'var(--bg-sidebar)',
+          backgroundColor: 'var(--bg-card)',
           display: 'flex',
           flexDirection: 'column',
           gap: '10px',
+          boxShadow: 'var(--shadow-sm)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -48,7 +49,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({ onImportWeRead, onImportFe
           </span>
         </div>
 
-        <div style={{ fontSize: '11px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
+        <div style={{ fontSize: '11px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
           自动捕获《黄金圈法则》、《第一性原理》等书籍的划线批注与个人心得。
         </div>
 
@@ -68,6 +69,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({ onImportWeRead, onImportFe
             borderRadius: 'var(--radius-sm)',
             cursor: 'pointer',
             transition: 'var(--transition-smooth)',
+            outline: 'none',
           }}
         >
           <Icon name="import" size={13} />
@@ -75,16 +77,17 @@ export const ImportTab: React.FC<ImportTabProps> = ({ onImportWeRead, onImportFe
         </button>
       </div>
 
-      {/* 飞书云文档渠道卡片 */}
+      {/* 飞书云文档卡片 */}
       <div
         style={{
           padding: '14px',
           borderRadius: 'var(--radius-md)',
           border: '1px solid var(--border-color)',
-          backgroundColor: 'var(--bg-sidebar)',
+          backgroundColor: 'var(--bg-card)',
           display: 'flex',
           flexDirection: 'column',
           gap: '10px',
+          boxShadow: 'var(--shadow-sm)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -110,7 +113,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({ onImportWeRead, onImportFe
           </span>
         </div>
 
-        <div style={{ fontSize: '11px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
+        <div style={{ fontSize: '11px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
           快速导入团队敏捷开发大纲、需求评审看板与多维度素材。
         </div>
 
@@ -125,11 +128,12 @@ export const ImportTab: React.FC<ImportTabProps> = ({ onImportWeRead, onImportFe
             fontSize: '12px',
             fontWeight: 500,
             color: 'var(--text-primary)',
-            backgroundColor: 'var(--bg-card)',
+            backgroundColor: 'var(--bg-hover)',
             border: '1px solid var(--border-color)',
             borderRadius: 'var(--radius-sm)',
             cursor: 'pointer',
             transition: 'var(--transition-smooth)',
+            outline: 'none',
           }}
         >
           <Icon name="file-text" size={13} />

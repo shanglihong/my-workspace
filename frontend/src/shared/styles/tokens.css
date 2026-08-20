@@ -1,39 +1,40 @@
 /* 极简风 CSS Design Tokens */
 
 :root {
-  /* 颜色词典 (高级 SaaS 极简日间模式 Light) */
-  --bg-app: #f9fafb;          /* 主画布：自然平滑的浅灰衬底 */
-  --bg-header: rgba(255, 255, 255, 0.85); /* 顶栏：通透毛玻璃质感 */
-  --bg-sidebar: #f3f4f6;      /* 一级 Icon 侧边栏：清爽平滑的柔灰 */
-  --bg-card: #ffffff;         /* 卡片/二级目录栏：晶莹白质感 */
-  --bg-hover: rgba(0, 0, 0, 0.035);      /* 悬停：极致微弱淡灰 */
-  --bg-active: rgba(0, 0, 0, 0.06);      /* 点击：柔和浅灰 */
+  /* 颜色词典 (日间模式 Light：100% 保持用户调好的精确原版配色) */
+  --bg-app: #f9fafb;          /* 主画布衬底 */
+  --bg-header: rgba(255, 255, 255, 0.85); /* 顶栏毛玻璃 */
+  --bg-sidebar: #fafafa;      /* 侧边栏/抽屉背景：100% 保持用户指定的原版底色 */
+  --bg-card: #ffffff;         /* 悬浮 Card/框底色 */
+  --bg-hover: #f3f4f6;        /* 悬停/胶囊按钮底色 */
+  --bg-active: rgba(0, 0, 0, 0.06);
   
-  --border-color: rgba(0, 0, 0, 0.06);  /* 边界：极微细柔切线，告别粗硬框 */
-  --border-light: rgba(0, 0, 0, 0.03);  /* 轻微分割线 */
+  --border-color: rgba(0, 0, 0, 0.08);  /* 轻柔切线 */
+  --border-light: rgba(0, 0, 0, 0.04);
   
-  --text-primary: #0f172a;    /* 主字：深邃石墨黑 */
-  --text-secondary: #475569;  /* 次字：烟灰 */
-  --text-muted: #94a3b8;     /* 弱化字：淡柔灰 */
+  --text-primary: #1f1f1f;    /* 墨黑原版正文字体 */
+  --text-secondary: #595959;  /* 烟灰次级字 */
+  --text-muted: #8c8c8c;     /* 弱化小字 */
   
-  --primary-color: #2563eb;   /* 品牌/选中图标：纯正现代皇家蓝 */
-  --primary-hover: #1d4ed8;   /* 悬停加深蓝 */
-  --primary-light: rgba(37, 99, 235, 0.08); /* 选中底质：极柔淡蓝发光衬膜，通透轻盈 */
+  --user-bubble-bg: #262626;  /* 用户消息深黑大圆角胶囊 */
+  --user-bubble-text: #ffffff;/* 用户消息纯白字 */
 
-  /* 状态与语义色彩 Token */
+  --primary-color: #2563eb;   /* 品牌蓝 */
+  --primary-hover: #1d4ed8;
+  --primary-light: rgba(37, 99, 235, 0.08);
+
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-info: #3b82f6;
   --color-violet: #8b5cf6;
   
-  /* 尺寸及阴影定义 */
   --sidebar-width: 260px;
   --sidebar-collapsed-width: 64px;
   --header-height: 54px;
   
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
-  --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.05), 0 2px 4px -1px rgba(15, 23, 42, 0.02);
-  --shadow-lg: 0 12px 24px -4px rgba(15, 23, 42, 0.07), 0 4px 8px -2px rgba(15, 23, 42, 0.03);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 12px 24px -4px rgba(15, 23, 42, 0.07);
 
   --radius-sm: 4px;
   --radius-md: 6px;
@@ -43,24 +44,27 @@
 }
 
 [data-theme='dark'] {
-  /* 颜色词典 (高级曜石极简暗黑模式 Dark) */
-  --bg-app: #090d16;          /* 主编辑器画布：最深邃的曜夜黑 */
-  --bg-header: rgba(15, 20, 32, 0.8);       /* 顶栏：通透暗夜毛玻璃 */
-  --bg-sidebar: #0d111a;      /* 一级 Icon 侧边栏：低调深邃基色 */
-  --bg-card: #131926;         /* 卡片/二级目录栏：稍微浮起的暗石质感 */
-  --bg-hover: rgba(255, 255, 255, 0.05);   /* 悬停：极致微光薄面 */
-  --bg-active: rgba(255, 255, 255, 0.09);  /* 点击/选中：微明高光 */
+  /* 颜色词典 (夜间模式 Dark：精准映射适配) */
+  --bg-app: #090d16;          /* 主编辑器画布 */
+  --bg-header: rgba(15, 20, 32, 0.8);
+  --bg-sidebar: #0d111a;      /* 夜间侧边栏底色 */
+  --bg-card: #131926;         /* 夜间 Card 框底色 */
+  --bg-hover: rgba(255, 255, 255, 0.08);
+  --bg-active: rgba(255, 255, 255, 0.12);
   
-  --border-color: rgba(255, 255, 255, 0.07); /* 边界：极细微光分割线 */
-  --border-light: rgba(255, 255, 255, 0.04); /* 轻微分割线 */
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-light: rgba(255, 255, 255, 0.04);
   
-  --text-primary: #f1f5f9;    /* 主字：通透象牙雪白 */
-  --text-secondary: #94a3b8;  /* 次字：石墨精致中灰 */
-  --text-muted: #64748b;     /* 弱化字：暗夜玄灰 */
+  --text-primary: #f1f5f9;    /* 夜间通透象牙雪白正文 */
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
   
-  --primary-color: #60a5fa;   /* 品牌/选中图标：清澈柔亮天空蓝 */
-  --primary-hover: #93c5fd;   /* 悬停亮蓝 */
-  --primary-light: rgba(59, 130, 246, 0.16); /* 选中底质：微弱柔蓝发光膜，优雅不刺眼 */
+  --user-bubble-bg: #f1f5f9;  /* 夜间用户气泡 */
+  --user-bubble-text: #131926;
+  
+  --primary-color: #60a5fa;
+  --primary-hover: #93c5fd;
+  --primary-light: rgba(59, 130, 246, 0.16);
   
   --color-success: #34d399;
   --color-warning: #fbbf24;
@@ -89,7 +93,7 @@ html, body, #root {
   -webkit-font-smoothing: antialiased;
 }
 
-/* 极简自定义滚动条 */
+/* 自定义全局滚动条 */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -106,4 +110,34 @@ html, body, #root {
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(140, 140, 140, 0.4);
+}
+
+.doc-editor-viewport-scroll::-webkit-scrollbar-thumb {
+  background: transparent;
+  transition: background 0.25s ease;
+}
+
+.doc-editor-viewport-scroll.is-scrolling::-webkit-scrollbar-thumb {
+  background: rgba(140, 140, 140, 0.35);
+}
+
+.doc-editor-viewport-scroll.is-scrolling::-webkit-scrollbar-thumb:hover {
+  background: rgba(140, 140, 140, 0.55);
+}
+
+/* Popover 弹窗平滑微拉伸展开淡入动画 */
+@keyframes popoverScaleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.popover-animate-enter {
+  animation: popoverScaleFadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transform-origin: top right;
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { IconName } from '@/shared/ui';
 
 export interface NotificationItem {
@@ -45,14 +45,16 @@ export const useHeaderNotice = () => {
     },
   ];
 
-  const toggleNotice = () => setIsNoticeOpen(prev => !prev);
-  const markAllAsRead = () => setUnreadCount(0);
+  const toggleNotice = useCallback(() => setIsNoticeOpen(prev => !prev), []);
+  const closeNotice = useCallback(() => setIsNoticeOpen(false), []);
+  const markAllAsRead = useCallback(() => setUnreadCount(0), []);
 
   return {
     isNoticeOpen,
     unreadCount,
     notifications,
     toggleNotice,
+    closeNotice,
     markAllAsRead,
   };
 };
