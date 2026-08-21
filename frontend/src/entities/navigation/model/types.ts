@@ -5,6 +5,7 @@ export interface NavNode {
   title: string;
   type: NodeType;
   icon?: string;
+  description?: string;
   parentId?: string | null;
   children?: NavNode[];
   isPinned?: boolean;

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Icon } from '@/shared/ui';
 import { useTasks } from '../model/useTasks';
 import { TaskBoard } from './TaskBoard';
+import { TaskCalendar } from './TaskCalendar';
 
 export const TasksPage: React.FC = () => {
   const {
@@ -14,6 +15,8 @@ export const TasksPage: React.FC = () => {
     handleAddTask,
   } = useTasks();
 
+  const [pageViewMode, setPageViewMode] = useState<'list' | 'calendar'>('calendar');
+
   return (
     <div
       style={{
@@ -22,24 +25,143 @@ export const TasksPage: React.FC = () => {
         backgroundColor: 'var(--bg-app)',
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'auto',
-        padding: '24px 32px',
-        gap: '24px',
+        overflow: 'hidden',
+        padding: '14px 24px',
+        gap: '14px',
         userSelect: 'none',
       }}
     >
-      {/* 顶部 Header & 新建输入 */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
-        <div>
-          <h1 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--text-primary)', margin: 0 }}>
+      {/* 顶部 Header Toolbar & 视图切换 & 快捷指标 */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'nowrap',
+          gap: '16px',
+          flexShrink: 0,
+          minHeight: '40px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', minWidth: 0 }}>
+          {/* 标题 */}
+          <h1
+            style={{
+              fontSize: '16px',
+              fontWeight: 700,
+              color: 'var(--text-primary)',
+              margin: 0,
+              letterSpacing: '-0.2px',
+              whiteSpace: 'nowrap',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
             计划任务管理中心
           </h1>
-          <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
-            规划知识库整理、文件云端同步与内容导出计划
+
+          {/* 简洁指标 Pill 标签 */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+            <span
+              style={{
+                fontSize: '11px',
+                fontWeight: 600,
+                padding: '2px 8px',
+                borderRadius: '10px',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                color: 'var(--primary-color)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'var(--primary-color)' }} />
+              进行中 {inProgressCount}
+            </span>
+            <span
+              style={{
+                fontSize: '11px',
+                fontWeight: 600,
+                padding: '2px 8px',
+                borderRadius: '10px',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                color: '#10b981',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#10b981' }} />
+              已完成 {completedCount}
+            </span>
+          </div>
+
+          {/* 视图切换按钮 Segmented Control */}
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              backgroundColor: 'var(--bg-sidebar)',
+              padding: '2px',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--border-color)',
+              flexShrink: 0,
+            }}
+          >
+            <button
+              onClick={() => setPageViewMode('list')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px',
+                height: '26px',
+                padding: '0 10px',
+                fontSize: '12px',
+                fontWeight: pageViewMode === 'list' ? 600 : 400,
+                color: pageViewMode === 'list' ? 'var(--primary-color)' : 'var(--text-secondary)',
+                backgroundColor: pageViewMode === 'list' ? 'var(--bg-card)' : 'transparent',
+                border: 'none',
+                borderRadius: 'var(--radius-sm)',
+                boxShadow: pageViewMode === 'list' ? 'var(--shadow-sm)' : 'none',
+                cursor: 'pointer',
+                transition: 'var(--transition-smooth)',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <Icon name="file-text" size={13} />
+              <span>清单视图</span>
+            </button>
+
+            <button
+              onClick={() => setPageViewMode('calendar')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px',
+                height: '26px',
+                padding: '0 10px',
+                fontSize: '12px',
+                fontWeight: pageViewMode === 'calendar' ? 600 : 400,
+                color: pageViewMode === 'calendar' ? 'var(--primary-color)' : 'var(--text-secondary)',
+                backgroundColor: pageViewMode === 'calendar' ? 'var(--bg-card)' : 'transparent',
+                border: 'none',
+                borderRadius: 'var(--radius-sm)',
+                boxShadow: pageViewMode === 'calendar' ? 'var(--shadow-sm)' : 'none',
+                cursor: 'pointer',
+                transition: 'var(--transition-smooth)',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <Icon name="calendar" size={13} />
+              <span>日历视图</span>
+            </button>
           </div>
         </div>
 
-        <form onSubmit={handleAddTask} style={{ display: 'flex', gap: '8px' }}>
+        {/* 右侧快速新建任务表单 */}
+        <form onSubmit={handleAddTask} style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
           <input
             type="text"
             placeholder="新建计划任务..."
@@ -47,7 +169,7 @@ export const TasksPage: React.FC = () => {
             onChange={e => setNewTaskTitle(e.target.value)}
             style={{
               width: '240px',
-              height: '34px',
+              height: '32px',
               padding: '0 12px',
               backgroundColor: 'var(--bg-card)',
               border: '1px solid var(--border-color)',
@@ -55,6 +177,7 @@ export const TasksPage: React.FC = () => {
               color: 'var(--text-primary)',
               fontSize: '12px',
               outline: 'none',
+              transition: 'var(--transition-smooth)',
             }}
           />
           <button
@@ -62,9 +185,10 @@ export const TasksPage: React.FC = () => {
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '6px',
+              justifyContent: 'center',
+              gap: '4px',
               padding: '0 14px',
-              height: '34px',
+              height: '32px',
               fontSize: '12px',
               fontWeight: 500,
               color: '#ffffff',
@@ -72,6 +196,9 @@ export const TasksPage: React.FC = () => {
               border: 'none',
               borderRadius: 'var(--radius-md)',
               cursor: 'pointer',
+              boxShadow: '0 1px 3px rgba(59, 130, 246, 0.3)',
+              transition: 'var(--transition-smooth)',
+              whiteSpace: 'nowrap',
             }}
           >
             <Icon name="plus" size={14} color="#ffffff" />
@@ -80,25 +207,15 @@ export const TasksPage: React.FC = () => {
         </form>
       </div>
 
-      {/* 统计指标 */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
-        <div style={{ padding: '16px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
-          <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>进行中任务</div>
-          <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--primary-color)', marginTop: '2px' }}>
-            {inProgressCount} <span style={{ fontSize: '12px', fontWeight: 400, color: 'var(--text-muted)' }}>个</span>
-          </div>
-        </div>
-
-        <div style={{ padding: '16px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
-          <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>已完成任务</div>
-          <div style={{ fontSize: '20px', fontWeight: 700, color: '#10b981', marginTop: '2px' }}>
-            {completedCount} <span style={{ fontSize: '12px', fontWeight: 400, color: 'var(--text-muted)' }}>个</span>
-          </div>
-        </div>
+      {/* 视图主体区域：根据 pageViewMode 自适应撑满 */}
+      <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: pageViewMode === 'list' ? 'auto' : 'hidden' }}>
+        {pageViewMode === 'list' ? (
+          <TaskBoard tasks={tasks} onToggleTask={handleToggleTask} />
+        ) : (
+          <TaskCalendar tasks={tasks} onToggleTask={handleToggleTask} onAddTask={handleAddTask} />
+        )}
       </div>
-
-      {/* 任务列表看板 */}
-      <TaskBoard tasks={tasks} onToggleTask={handleToggleTask} />
     </div>
   );
 };
+

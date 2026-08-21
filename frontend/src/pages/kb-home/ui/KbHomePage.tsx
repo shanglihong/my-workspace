@@ -1,13 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CreateDocButtonGroup } from '@/features';
-import { useKbHome } from '../model/useKbHome';
+import { useKbHome, KbItem } from '../model/useKbHome';
 import { KbStatHeader } from './KbStatHeader';
 import { Icon } from '@/shared/ui';
 import { useLayout } from '@/entities/layout';
+import { useNavigation } from '@/entities/navigation';
+import { KbCardItem } from './KbCardItem';
+import { KbFormModal } from './KbFormModal';
+import { KbConfirmDeleteModal } from './KbConfirmDeleteModal';
 
 export const KbHomePage: React.FC = () => {
-  const { quickAccessItems, setActiveNodeId } = useKbHome();
+  const { kbList, handleDeleteKb, handleUpdateKbInfo } = useKbHome();
+  const { createNewNode } = useNavigation();
   const { setActiveView } = useLayout();
+
+  const [editingKbItem, setEditingKbItem] = useState<KbItem | null>(null);
+  const [deletingKbItem, setDeletingKbItem] = useState<KbItem | null>(null);
+  const [hoveredKbId, setHoveredKbId] = useState<string | null>(null);
+
+  // 新建弹窗控制
+  const [isCreateKbModalOpen, setIsCreateKbModalOpen] = useState(false);
+
+  const handleCreateKbSubmit = (title: string, desc: string) => {
+    const finalTitle = title.trim() || '新建知识库';
+    const newId = createNewNode('folder', finalTitle);
+    if (desc.trim()) {
+      handleUpdateKbInfo(newId, { description: desc.trim() });
+    }
+    setIsCreateKbModalOpen(false);
+  };
+
+  const handleEditKbSubmit = (title: string, desc: string) => {
+    if (editingKbItem) {
+      handleUpdateKbInfo(editingKbItem.id, {
+        title: title.trim() || editingKbItem.title,
+        description: desc.trim(),
+      });
+      setEditingKbItem(null);
+    }
+  };
+
+  const handleConfirmDelete = () => {
+    if (deletingKbItem) {
+      handleDeleteKb(deletingKbItem.id);
+      setDeletingKbItem(null);
+    }
+  };
 
   return (
     <div
@@ -29,84 +67,78 @@ export const KbHomePage: React.FC = () => {
       <div style={{ padding: '28px 40px', display: 'flex', flexDirection: 'column', gap: '28px' }}>
         {/* 快捷新建与看板状态 */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-          {/* 引入通用 Feature 组件：新建文档/导图按钮组 */}
-          <CreateDocButtonGroup onCreated={() => setActiveView('editor')} />
-
+          {/* 引入通用 Feature 组件：新建知识库/新建文档按钮组 */}
+          <CreateDocButtonGroup
+            mode="kb"
+            onCreated={() => setActiveView('editor')}
+            onCreateKbClick={() => setIsCreateKbModalOpen(true)}
+          />
 
           {/* 右侧小数据徽章 */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '12px', color: 'var(--text-muted)' }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
               <Icon name="book" size={13} color="var(--primary-color)" />
-              <span>知识库节点：</span>
-              <strong style={{ color: 'var(--text-primary)' }}>5 个页面</strong>
+              <span>知识库总数：</span>
+              <strong style={{ color: 'var(--text-primary)' }}>{kbList.length} 个知识库</strong>
             </span>
             <span>·</span>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
               <Icon name="file-text" size={13} color="#10b981" />
-              <span>已连微信读书：</span>
-              <strong style={{ color: '#10b981' }}>128 条划线</strong>
+              <span>已同步文档：</span>
+              <strong style={{ color: '#10b981' }}>128 篇</strong>
             </span>
           </div>
-
         </div>
 
-        {/* 常用与推荐文档 Grid */}
+        {/* 知识库列表 Grid */}
         <div>
           <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '14px' }}>
-            常用与推荐页面
+            我的知识库
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
-            {quickAccessItems.map(item => (
-              <div
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
+            {kbList.map(item => (
+              <KbCardItem
                 key={item.id}
-                onClick={() => setActiveNodeId(item.id)}
-                style={{
-                  padding: '18px',
-                  borderRadius: 'var(--radius-md)',
-                  backgroundColor: 'var(--bg-card)',
-                  border: '1px solid var(--border-color)',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '10px',
-                  boxShadow: 'var(--shadow-sm)',
-                  transition: 'var(--transition-smooth)',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = 'var(--primary-color)';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = 'var(--border-color)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Icon name={item.icon} size={18} color={item.iconColor} />
-                    <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)' }}>
-                      {item.title}
-                    </span>
-                  </div>
-                  <span style={{ fontSize: '11px', padding: '2px 6px', borderRadius: '4px', backgroundColor: 'var(--bg-sidebar)', color: 'var(--text-muted)' }}>
-                    {item.tag}
-                  </span>
-                </div>
-
-                <div style={{ fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                  {item.desc}
-                </div>
-
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)', paddingTop: '8px', borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between' }}>
-                  <span>{item.updatedAt}</span>
-                  <span style={{ color: 'var(--primary-color)' }}>打开节点 →</span>
-                </div>
-              </div>
+                item={item}
+                isHovered={hoveredKbId === item.id}
+                onMouseEnter={() => setHoveredKbId(item.id)}
+                onMouseLeave={() => setHoveredKbId(null)}
+                onOpenSettings={setEditingKbItem}
+                onOpenDelete={setDeletingKbItem}
+              />
             ))}
           </div>
         </div>
       </div>
+
+      {/* 新建知识库 Modal 对话框 */}
+      <KbFormModal
+        isOpen={isCreateKbModalOpen}
+        title="创建知识库"
+        submitText="创建知识库"
+        onClose={() => setIsCreateKbModalOpen(false)}
+        onSubmit={handleCreateKbSubmit}
+      />
+
+      {/* 编辑知识库设置 Modal 对话框 */}
+      <KbFormModal
+        isOpen={!!editingKbItem}
+        title="知识库设置"
+        submitText="保存设置"
+        initialTitle={editingKbItem?.title}
+        initialDesc={editingKbItem?.description}
+        onClose={() => setEditingKbItem(null)}
+        onSubmit={handleEditKbSubmit}
+      />
+
+      {/* 删除确认 Modal 对话框 */}
+      <KbConfirmDeleteModal
+        isOpen={!!deletingKbItem}
+        title={deletingKbItem?.title || ''}
+        onClose={() => setDeletingKbItem(null)}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 };

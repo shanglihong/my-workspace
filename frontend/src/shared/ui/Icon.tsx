@@ -7,9 +7,12 @@ export type IconName =
   | 'book'
   | 'sparkles'
   | 'chevron-right'
+  | 'chevron-left'
   | 'chevron-down'
+  | 'chevron-up'
   | 'folder'
   | 'file-text'
+  | 'calendar'
   | 'chart'
   | 'plus'
   | 'share'
@@ -31,12 +34,16 @@ export type IconName =
   | 'import'
   | 'export'
   | 'check'
+  | 'check-circle'
   | 'copy'
   | 'download'
   | 'bell'
   | 'toolbox'
   | 'logo-brand'
   | 'arrow-up'
+  | 'more-horizontal'
+  | 'more-vertical'
+  | 'kb-home'
   | 'close';
 
 interface IconProps {
@@ -120,10 +127,50 @@ export const Icon: React.FC<IconProps> = ({ name, size = 16, color = 'currentCol
             strokeLinejoin="round"
           />
         );
+      case 'chevron-left':
+        return (
+          <path
+            d="M15 19l-7-7 7-7"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        );
       case 'chevron-down':
         return (
           <path
             d="M19 9l-7 7-7-7"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        );
+      case 'chevron-up':
+        return (
+          <path
+            d="M5 15l7-7 7 7"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        );
+      case 'calendar':
+        return (
+          <path
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        );
+      case 'check-circle':
+        return (
+          <path
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
             stroke={color}
             strokeWidth="2"
             strokeLinecap="round"
@@ -403,6 +450,22 @@ export const Icon: React.FC<IconProps> = ({ name, size = 16, color = 'currentCol
             <circle cx="12" cy="12.5" r="1.5" fill={color} />
           </g>
         );
+      case 'more-horizontal':
+        return (
+          <g fill={color}>
+            <circle cx="6" cy="12" r="1.75" />
+            <circle cx="12" cy="12" r="1.75" />
+            <circle cx="18" cy="12" r="1.75" />
+          </g>
+        );
+      case 'more-vertical':
+        return (
+          <g fill={color}>
+            <circle cx="12" cy="6" r="1.75" />
+            <circle cx="12" cy="12" r="1.75" />
+            <circle cx="12" cy="18" r="1.75" />
+          </g>
+        );
       case 'close':
         return (
           <path
@@ -412,6 +475,15 @@ export const Icon: React.FC<IconProps> = ({ name, size = 16, color = 'currentCol
             strokeLinecap="round"
             strokeLinejoin="round"
           />
+        );
+      case 'kb-home':
+        return (
+          <g fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="7" height="9" rx="1.5" />
+            <rect x="14" y="3" width="7" height="5" rx="1.5" />
+            <rect x="14" y="12" width="7" height="9" rx="1.5" />
+            <rect x="3" y="16" width="7" height="5" rx="1.5" />
+          </g>
         );
       default:
         return null;

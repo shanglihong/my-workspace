@@ -88,3 +88,41 @@ export function calculateBreadcrumbPath(nodes: NavNode[], activeNodeId: string):
   }));
 }
 
+/**
+ * 递归从树中删除指定 ID 的节点
+ */
+export function removeNodeFromTree(nodes: NavNode[], targetId: string): NavNode[] {
+  return nodes
+    .filter(node => node.id !== targetId)
+    .map(node => {
+      if (node.children && node.children.length > 0) {
+        return {
+          ...node,
+          children: removeNodeFromTree(node.children, targetId),
+        };
+      }
+      return node;
+    });
+}
+
+/**
+ * 给树中指定 ID 的节点添加子节点
+ */
+export function addChildToNodeInTree(nodes: NavNode[], parentId: string, childNode: NavNode): NavNode[] {
+  return nodes.map(node => {
+    if (node.id === parentId) {
+      return {
+        ...node,
+        children: [...(node.children || []), childNode],
+      };
+    }
+    if (node.children && node.children.length > 0) {
+      return {
+        ...node,
+        children: addChildToNodeInTree(node.children, parentId, childNode),
+      };
+    }
+    return node;
+  });
+}
+

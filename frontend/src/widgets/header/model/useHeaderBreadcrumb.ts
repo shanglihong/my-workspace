@@ -44,7 +44,7 @@ export const useHeaderBreadcrumb = () => {
           rootItem,
           { id: 'tasks-main', label: '计划任务管理', type: 'doc', isLast: true, nodeRef: dummyNode },
         ] as BreadcrumbItem[],
-        subText: '任务看板 · 当前有 3 个任务进行中',
+        subText: '多维日程日历与清单视图已就绪',
       };
     }
 

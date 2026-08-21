@@ -1,6 +1,6 @@
 import { useNavigation } from '@/entities/navigation';
 
-export const useDocCreate = (onCreated?: () => void) => {
+export const useDocCreate = (onCreated?: () => void, onKbCreated?: () => void) => {
   const { createNewNode } = useNavigation();
 
   const handleCreateDoc = () => {
@@ -13,9 +13,17 @@ export const useDocCreate = (onCreated?: () => void) => {
     if (onCreated) onCreated();
   };
 
+  const handleCreateKb = () => {
+    createNewNode('folder', '新建知识库');
+    if (onKbCreated) {
+      onKbCreated();
+    }
+  };
+
   return {
     handleCreateDoc,
     handleCreateChart,
+    handleCreateKb,
   };
 };
 

@@ -32,10 +32,10 @@ export const KbStatHeader: React.FC = () => {
         </div>
         <div>
           <h1 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
-            影视与工作协同知识库
+            知识库中心
           </h1>
           <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-            统一归档影视分析、黄金圈法则、微信读书笔记划线与团队协同思维导图
+            集中管理个人与团队知识体系，高效组织文档、笔记与各类协同资源
           </div>
         </div>
       </div>

@@ -18,12 +18,12 @@ export const SidebarKbDrawer: React.FC<SidebarKbDrawerProps> = ({
   onClose,
 }) => {
   const { activeNodeId, navigationTree } = useNavigation();
-  const { setActiveNodeId } = useLayout();
+  const { setActiveNodeId, setActiveView } = useLayout();
 
   return (
     <div
       style={{
-        width: isOpen ? '230px' : '0px',
+        width: isOpen ? 'var(--sidebar-kb-drawer-width, 280px)' : '0px',
         opacity: isOpen ? 1 : 0,
         height: '100vh',
         backgroundColor: 'var(--bg-sidebar)',
@@ -37,8 +37,8 @@ export const SidebarKbDrawer: React.FC<SidebarKbDrawerProps> = ({
         zIndex: 9,
       }}
     >
-      {/* 内部固定 230px 宽度的容器，保障宽缩伸展过程无换行闪烁 */}
-      <div style={{ width: '230px', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      {/* 内部固定 280px 宽度的容器，保障宽缩伸展过程无换行闪烁 */}
+      <div style={{ width: 'var(--sidebar-kb-drawer-width, 280px)', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {/* 侧边栏 Header */}
         <div
           style={{
@@ -50,29 +50,55 @@ export const SidebarKbDrawer: React.FC<SidebarKbDrawerProps> = ({
             borderBottom: '1px solid var(--border-light)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div
+            onClick={() => setActiveView('kb-home')}
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
+            title="点击进入知识库首页"
+          >
             <Icon name="book" size={16} color="var(--primary-color)" />
             <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>知识库目录</span>
           </div>
 
-          <div
-            onClick={onClose}
-            title="收起知识库目录栏"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '24px',
-              height: '24px',
-              borderRadius: 'var(--radius-sm)',
-              cursor: 'pointer',
-              color: 'var(--text-muted)',
-              transition: 'var(--transition-smooth)',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--bg-hover)')}
-            onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
-          >
-            <Icon name="sidebar-close" size={14} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <div
+              onClick={() => setActiveView('kb-home')}
+              title="进入知识库首页看板"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '24px',
+                height: '24px',
+                borderRadius: 'var(--radius-sm)',
+                cursor: 'pointer',
+                color: 'var(--text-secondary)',
+                transition: 'var(--transition-smooth)',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--bg-hover)')}
+              onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
+            >
+              <Icon name="kb-home" size={15} color="var(--primary-color)" />
+            </div>
+
+            <div
+              onClick={onClose}
+              title="收起知识库目录栏"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '24px',
+                height: '24px',
+                borderRadius: 'var(--radius-sm)',
+                cursor: 'pointer',
+                color: 'var(--text-muted)',
+                transition: 'var(--transition-smooth)',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--bg-hover)')}
+              onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
+            >
+              <Icon name="sidebar-close" size={14} />
+            </div>
           </div>
         </div>
 

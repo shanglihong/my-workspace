@@ -7,6 +7,11 @@ export interface TaskItem {
   priority: 'P0' | 'P1' | 'P2';
   status: 'todo' | 'in_progress' | 'completed';
   dueDate: string;
+  date?: string; // YYYY-MM-DD
+  startTime?: string; // HH:mm
+  endTime?: string; // HH:mm
+  owner?: string;
+  calendarId?: string; // task | meeting | personal | sync
 }
 
 export const useTasks = () => {
@@ -18,6 +23,11 @@ export const useTasks = () => {
       priority: 'P0',
       status: 'in_progress',
       dueDate: '今日 18:00',
+      date: '2026-08-21',
+      startTime: '09:00',
+      endTime: '10:30',
+      owner: '刘巧',
+      calendarId: 'sync',
     },
     {
       id: 'task-2',
@@ -26,6 +36,11 @@ export const useTasks = () => {
       priority: 'P1',
       status: 'todo',
       dueDate: '明日 12:00',
+      date: '2026-08-22',
+      startTime: '10:00',
+      endTime: '12:00',
+      owner: '刘巧',
+      calendarId: 'task',
     },
     {
       id: 'task-3',
@@ -34,6 +49,11 @@ export const useTasks = () => {
       priority: 'P1',
       status: 'in_progress',
       dueDate: '8月18日',
+      date: '2026-08-18',
+      startTime: '11:00',
+      endTime: '13:00',
+      owner: '刘巧',
+      calendarId: 'task',
     },
     {
       id: 'task-4',
@@ -42,6 +62,37 @@ export const useTasks = () => {
       priority: 'P2',
       status: 'completed',
       dueDate: '8月15日',
+      date: '2026-08-15',
+      startTime: '14:00',
+      endTime: '15:30',
+      owner: '刘巧',
+      calendarId: 'personal',
+    },
+    {
+      id: 'task-5',
+      title: '知识库全文索引构建与向量数据库优化周会',
+      category: 'AI引擎',
+      priority: 'P0',
+      status: 'in_progress',
+      dueDate: '今日 16:00',
+      date: '2026-08-21',
+      startTime: '14:00',
+      endTime: '16:00',
+      owner: '刘巧',
+      calendarId: 'meeting',
+    },
+    {
+      id: 'task-6',
+      title: '前端架构重构与日历视图开发',
+      category: '视图与组件',
+      priority: 'P1',
+      status: 'in_progress',
+      dueDate: '8月19日',
+      date: '2026-08-19',
+      startTime: '15:00',
+      endTime: '17:00',
+      owner: '刘巧',
+      calendarId: 'task',
     },
   ]);
 
@@ -59,16 +110,23 @@ export const useTasks = () => {
     );
   };
 
-  const handleAddTask = (e: FormEvent) => {
-    e.preventDefault();
-    if (!newTaskTitle.trim()) return;
+  const handleAddTask = (e: FormEvent, taskData?: Partial<TaskItem>) => {
+    if (e) e.preventDefault();
+    const title = taskData?.title || newTaskTitle;
+    if (!title.trim()) return;
+
+    const todayStr = '2026-08-21';
     const newTask: TaskItem = {
       id: `task-${Date.now()}`,
-      title: newTaskTitle.trim(),
-      category: '通用任务',
-      priority: 'P1',
+      title: title.trim(),
+      category: taskData?.category || '通用任务',
+      priority: taskData?.priority || 'P1',
       status: 'in_progress',
-      dueDate: '未指定',
+      dueDate: taskData?.dueDate || '今日 18:00',
+      date: taskData?.date || todayStr,
+      startTime: taskData?.startTime || '10:00',
+      endTime: taskData?.endTime || '11:30',
+      owner: '刘巧',
     };
     setTasks(prev => [newTask, ...prev]);
     setNewTaskTitle('');
@@ -87,3 +145,4 @@ export const useTasks = () => {
     handleAddTask,
   };
 };
+

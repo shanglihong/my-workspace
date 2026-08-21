@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
 import { NavNode, BreadcrumbItem } from './types';
-import { calculateBreadcrumbPath, findNodePath, updateNodeInTree } from './navigationModel';
+import { calculateBreadcrumbPath, findNodePath, updateNodeInTree, removeNodeFromTree, addChildToNodeInTree } from './navigationModel';
 
 interface NavigationContextValue {
   navigationTree: NavNode[];
@@ -9,8 +9,12 @@ interface NavigationContextValue {
   setActiveNodeId: (id: string) => void;
   activeNode: NavNode | null;
   breadcrumbPath: BreadcrumbItem[];
-  createNewNode: (type: 'doc' | 'chart', title?: string) => string;
+  createNewNode: (type: 'doc' | 'chart' | 'folder', title?: string) => string;
+  createChildNode: (parentId: string, type: 'doc' | 'chart' | 'folder', title?: string) => string;
+  deleteNode: (nodeId: string) => void;
+  togglePinNode: (nodeId: string) => void;
   updateNodeContent: (nodeId: string, content: string) => void;
+  updateNodeInfo: (nodeId: string, info: { title?: string; description?: string }) => void;
 }
 
 const NavigationContext = createContext<NavigationContextValue | null>(null);
@@ -36,9 +40,10 @@ export const NavigationProvider: React.FC<NavigationProviderProps> = ({ children
     return path ? path[path.length - 1] : null;
   }, [navigationTree, activeNodeId]);
 
-  const createNewNode = useCallback((type: 'doc' | 'chart', title?: string): string => {
+  const createNewNode = useCallback((type: 'doc' | 'chart' | 'folder', title?: string): string => {
     const newId = `${type}-${Date.now()}`;
-    const newNodeName = title || (type === 'doc' ? '无标题文档' : '新建流程图');
+    const newNodeName =
+      title || (type === 'folder' ? '新建知识库' : type === 'doc' ? '无标题文档' : '新建流程图');
     const newNode: NavNode = {
       id: newId,
       title: newNodeName,
@@ -46,6 +51,7 @@ export const NavigationProvider: React.FC<NavigationProviderProps> = ({ children
       author: { name: '当前用户' },
       updatedAt: '刚刚修改',
       content: type === 'doc' ? `# ${newNodeName}\n\n开始撰写内容...` : '',
+      children: type === 'folder' ? [] : undefined,
     };
 
     setNavigationTree(prev => [newNode, ...prev]);
@@ -53,11 +59,54 @@ export const NavigationProvider: React.FC<NavigationProviderProps> = ({ children
     return newId;
   }, []);
 
+  const createChildNode = useCallback((parentId: string, type: 'doc' | 'chart' | 'folder', title?: string): string => {
+    const newId = `${type}-${Date.now()}`;
+    const newNodeName =
+      title || (type === 'folder' ? '新建分类' : type === 'doc' ? '无标题文档' : '新建流程图');
+    const newNode: NavNode = {
+      id: newId,
+      title: newNodeName,
+      type: type,
+      author: { name: '当前用户' },
+      updatedAt: '刚刚修改',
+      content: type === 'doc' ? `# ${newNodeName}\n\n开始撰写内容...` : '',
+      children: type === 'folder' ? [] : undefined,
+    };
+
+    setNavigationTree(prev => addChildToNodeInTree(prev, parentId, newNode));
+    setActiveNodeId(newId);
+    return newId;
+  }, []);
+
+  const deleteNode = useCallback((nodeId: string) => {
+    setNavigationTree(prev => removeNodeFromTree(prev, nodeId));
+    setActiveNodeId(prev => (prev === nodeId ? '' : prev));
+  }, []);
+
+  const togglePinNode = useCallback((nodeId: string) => {
+    setNavigationTree(prev =>
+      updateNodeInTree(prev, nodeId, node => ({
+        ...node,
+        isPinned: !node.isPinned,
+      }))
+    );
+  }, []);
+
   const updateNodeContent = useCallback((nodeId: string, content: string) => {
     setNavigationTree(prev =>
       updateNodeInTree(prev, nodeId, node => ({
         ...node,
         content,
+        updatedAt: '刚刚修改',
+      }))
+    );
+  }, []);
+
+  const updateNodeInfo = useCallback((nodeId: string, info: { title?: string; description?: string }) => {
+    setNavigationTree(prev =>
+      updateNodeInTree(prev, nodeId, node => ({
+        ...node,
+        ...info,
         updatedAt: '刚刚修改',
       }))
     );
@@ -72,9 +121,24 @@ export const NavigationProvider: React.FC<NavigationProviderProps> = ({ children
       activeNode,
       breadcrumbPath,
       createNewNode,
+      createChildNode,
+      deleteNode,
+      togglePinNode,
       updateNodeContent,
+      updateNodeInfo,
     }),
-    [navigationTree, activeNodeId, activeNode, breadcrumbPath, createNewNode, updateNodeContent]
+    [
+      navigationTree,
+      activeNodeId,
+      activeNode,
+      breadcrumbPath,
+      createNewNode,
+      createChildNode,
+      deleteNode,
+      togglePinNode,
+      updateNodeContent,
+      updateNodeInfo,
+    ]
   );
 
   return <NavigationContext.Provider value={value}>{children}</NavigationContext.Provider>;

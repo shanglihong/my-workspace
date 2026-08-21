@@ -16,8 +16,8 @@ export const useSidebarMenu = () => {
     { id: 'nav-home', label: '主页', icon: 'home' },
     { id: 'nav-kb', label: '知识库', icon: 'book' },
     { id: 'nav-tasks', label: '计划任务管理', icon: 'clock' },
-    { id: 'nav-toolbox', label: '工具箱', icon: 'toolbox' },
     { id: 'nav-drive', label: '云盘管理', icon: 'cloud' },
+    { id: 'nav-toolbox', label: '工具箱', icon: 'toolbox' },
   ];
 
   const handleMenuClick = (itemId: string) => {
