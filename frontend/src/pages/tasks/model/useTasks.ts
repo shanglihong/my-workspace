@@ -1,18 +1,7 @@
 import { useState, FormEvent } from 'react';
+import { TaskItem } from './types';
 
-export interface TaskItem {
-  id: string;
-  title: string;
-  category: string;
-  priority: 'P0' | 'P1' | 'P2';
-  status: 'todo' | 'in_progress' | 'completed';
-  dueDate: string;
-  date?: string; // YYYY-MM-DD
-  startTime?: string; // HH:mm
-  endTime?: string; // HH:mm
-  owner?: string;
-  calendarId?: string; // task | meeting | personal | sync
-}
+export type { TaskItem };
 
 export const useTasks = () => {
   const [tasks, setTasks] = useState<TaskItem[]>([
@@ -132,6 +121,16 @@ export const useTasks = () => {
     setNewTaskTitle('');
   };
 
+  const handleUpdateTask = (taskId: string, updatedData: Partial<TaskItem>) => {
+    setTasks(prev =>
+      prev.map(t => (t.id === taskId ? { ...t, ...updatedData } : t))
+    );
+  };
+
+  const handleDeleteTask = (taskId: string) => {
+    setTasks(prev => prev.filter(t => t.id !== taskId));
+  };
+
   const inProgressCount = tasks.filter(t => t.status !== 'completed').length;
   const completedCount = tasks.filter(t => t.status === 'completed').length;
 
@@ -143,6 +142,8 @@ export const useTasks = () => {
     completedCount,
     handleToggleTask,
     handleAddTask,
+    handleUpdateTask,
+    handleDeleteTask,
   };
 };
 

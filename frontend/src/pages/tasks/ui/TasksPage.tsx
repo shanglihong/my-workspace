@@ -13,6 +13,8 @@ export const TasksPage: React.FC = () => {
     completedCount,
     handleToggleTask,
     handleAddTask,
+    handleUpdateTask,
+    handleDeleteTask,
   } = useTasks();
 
   const [pageViewMode, setPageViewMode] = useState<'list' | 'calendar'>('calendar');
@@ -212,7 +214,13 @@ export const TasksPage: React.FC = () => {
         {pageViewMode === 'list' ? (
           <TaskBoard tasks={tasks} onToggleTask={handleToggleTask} />
         ) : (
-          <TaskCalendar tasks={tasks} onToggleTask={handleToggleTask} onAddTask={handleAddTask} />
+          <TaskCalendar
+            tasks={tasks}
+            onToggleTask={handleToggleTask}
+            onAddTask={handleAddTask}
+            onUpdateTask={handleUpdateTask}
+            onDeleteTask={handleDeleteTask}
+          />
         )}
       </div>
     </div>
